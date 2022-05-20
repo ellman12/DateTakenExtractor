@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Date_Taken_Extractor</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Date-Taken-Extractor</PackageId>
+    <Authors>Elliott D</Authors>
+    <Company>Elliott D</Company>
+    <Product>Date-Taken-Extractor</Product>
+    <Description>Small, fast, simple library for extracting Date Taken metadata from photos and videos.</Description>
+    <RepositoryUrl>https://github.com/ellman12/Date-Taken-Extractor</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/ellman12/Date-Taken-Extractor</PackageProjectUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>metadata; datetaken; date-taken; metadata-extraction; metadata-extractor; datetime-library</PackageTags>
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <FileVersion>0.0.0.1</FileVersion>
+    <PackageReleaseNotes>0.0.0.1</PackageReleaseNotes>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Version>0.0.0.1</Version>
+    <Copyright></Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
