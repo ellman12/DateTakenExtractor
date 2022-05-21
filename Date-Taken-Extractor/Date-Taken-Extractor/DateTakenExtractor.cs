@@ -1,4 +1,6 @@
-﻿namespace Date_Taken_Extractor;
+using System.Text.RegularExpressions;
+
+namespace Date_Taken_Extractor;
 
 ///Contains static methods for making it easy to get Date Taken metadata from photos and videos.
 public static class DateTakenExtractor
@@ -15,7 +17,8 @@ public static class DateTakenExtractor
 		///No Date Taken in metadata or filename.
 		None
 	}
-	
+
+	/*
 	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't, looks in the filename. If no data in both, return null.</summary>
 	/// <param name="fullPath">The full path to the file.</param>
 	/// <param name="dateTaken">The DateTime? variable to store the Date Taken in.</param>
@@ -61,9 +64,20 @@ public static class DateTakenExtractor
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
 		if (!File.Exists(fullPath)) throw new ArgumentException("File specified does not exist.");
 	}
+	*/
 
-	private static DateTime? GetFilenameDT(string filename)
+	///<summary>Analyzes a filename to see if it has a timestamp in it.</summary>
+	///<param name="filename">The filename to analyze, with or without the file extension.</param>
+	///<returns>A DateTime? representing the timestamp that was found in the file. null if couldn't find a timestamp.</returns>
+	public static DateTime? AnalyzeFilename(string filename)
 	{
-		//TODO: try regex here lmao
+		//Each thing in () is considered a group.
+		const string PATTERN = @"(\d{4})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})([^\d]|$)";
+		MatchCollection matches = new Regex(PATTERN).Matches(filename);
+		if (matches.Count == 0) return null; //.Count should only ever be 0 or 1 with this pattern.
+		
+		//groups[0] is the whole match that was returned. E.g., '20210320_175909.' groups[1] is the year, groups[2] is the month, etc.
+		GroupCollection groups = matches[0].Groups;
+		return DateTime.Parse($"{groups[1]}-{groups[2]}-{groups[3]} {groups[4]}:{groups[5]}:{groups[6]}");
 	}
 }

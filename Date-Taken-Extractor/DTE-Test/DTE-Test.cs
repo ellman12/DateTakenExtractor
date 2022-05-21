@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Date_Taken_Extractor;
 using Xunit;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
@@ -49,20 +51,20 @@ public class DTE_Test
 		// }
 	}
 
-	[Fact]
-	public void PngTest()
+	[Theory]
+	//Common filename timestamp formats I've encountered, with a few non-timestamps.
+	[InlineData("IMG_20210320_175909.jpg")] //Android camera
+	[InlineData("105600_20201226210642_1.png")] //Steam screenshots I think
+	[InlineData("Screenshot 2020-11-24 102029.png")] //Snip & Sketch
+	[InlineData("Saved Clip 20201107143123.png")] //No idea
+	[InlineData("Screenshot_2020-10-28_135904.png")] //No idea
+	[InlineData("Screenshot_20210426-122329_Messages.jpg")] //Android screenshot
+	[InlineData("2020-10-06_13.53.33.png")] //Minecraft I think
+	[InlineData("Snapchat-652999454.jpg")] //Random filename from saved Snapchat media
+	[InlineData("652999454.jpg")] //Random name I made
+	[InlineData("not a timestamp lol.jpg")] //Random name I made
+	public void FilenameTest(string filename)
 	{
-		// string[] pngs = System.IO.Directory.GetFiles("C:/Users/Elliott/Videos/test", "*.png", SearchOption.AllDirectories);
-		//
-		// foreach (string png in pngs)
-		// {
-		// 	_testOutputHelper.WriteLine(png);
-		// 	IEnumerable<Directory> directories = ImageMetadataReader.ReadMetadata(png);
-		// 	foreach (Directory directory in directories)
-		// 	foreach (Tag tag in directory.Tags)
-		// 		_testOutputHelper.WriteLine($"{directory.Name} - {tag.Name} = {tag.Description}");
-		//
-		// 	_testOutputHelper.WriteLine("\n");
-		// }
+		_testOutputHelper.WriteLine(DateTakenExtractor.AnalyzeFilename(filename).ToString());
 	}
 }
