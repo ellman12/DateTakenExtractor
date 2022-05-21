@@ -55,14 +55,17 @@ public class DTE_Test
 	//Common filename timestamp formats I've encountered, with a few non-timestamps.
 	[InlineData("IMG_20210320_175909.jpg")] //Android camera
 	[InlineData("105600_20201226210642_1.png")] //Steam screenshots I think
+	[InlineData("20201224140504_1.jpg")]
 	[InlineData("Screenshot 2020-11-24 102029.png")] //Snip & Sketch
 	[InlineData("Saved Clip 20201107143123.png")] //No idea
 	[InlineData("Screenshot_2020-10-28_135904.png")] //No idea
 	[InlineData("Screenshot_20210426-122329_Messages.jpg")] //Android screenshot
 	[InlineData("2020-10-06_13.53.33.png")] //Minecraft I think
+	[InlineData("Capture 2020-12-26 21_03_05.png")] //Terraria screenshot tool
 	[InlineData("Snapchat-652999454.jpg")] //Random filename from saved Snapchat media
 	[InlineData("652999454.jpg")] //Random name I made
 	[InlineData("not a timestamp lol.jpg")] //Random name I made
+	[InlineData("2022031620532000_s.mp4")] //N Switch filename
 	public void FilenameTest(string filename)
 	{
 		_testOutputHelper.WriteLine(DateTakenExtractor.AnalyzeFilename(filename).ToString());
