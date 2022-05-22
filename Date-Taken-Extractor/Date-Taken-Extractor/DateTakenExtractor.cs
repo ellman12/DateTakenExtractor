@@ -83,4 +83,26 @@ public static class DateTakenExtractor
 		GroupCollection groups = matches[0].Groups;
 		return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}");
 	}
+	///<summary>Take a timestamp string like '2018-11-03 07:26:12', or of similar format, and attempt to parse and return a DateTime representing it.</summary>
+	///<param name="timestamp">The timestamp to attempt to parse.</param>
+	///<returns>A DateTime? representing the parsed timestamp. null if couldn't determine Date Taken.</returns>
+	public static DateTime? Parse(string timestamp)
+	{
+		try
+		{
+			//Remove any useless characters, and turn all the parts of the timestamp into integers for creating the DateTime.
+			timestamp = timestamp.Replace(" ", "").Replace("-", "").Replace("_", "").Replace(".", "").Replace(":", "").Replace(";", "");
+			int year = Int32.Parse(timestamp[..4]);
+			int month = Int32.Parse(timestamp[4..6]);
+			int day = Int32.Parse(timestamp[6..8]);
+			int hour = Int32.Parse(timestamp[8..10]);
+			int min = Int32.Parse(timestamp[10..12]);
+			int sec = Int32.Parse(timestamp[12..14]);
+			return new DateTime(year, month, day, hour, min, sec);
+		}
+		catch (FormatException)
+		{
+			return null;
+		}
+	}
 }

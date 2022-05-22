@@ -70,4 +70,15 @@ public class DTE_Test
 	{
 		_testOutputHelper.WriteLine(DateTakenExtractor.AnalyzeFilename(filename).ToString());
 	}
+	[Theory]
+	[InlineData("2018-11-03 07-26-12")]
+	[InlineData("2018:11:03 07:26:12")]
+	[InlineData("20181103072612")]
+	[InlineData("2018 11 03 07 26 12")]
+	[InlineData("2018-11-03 07:26:12")]
+	public void ParseTest(string timestamp)
+	{
+		DateTime? result = DateTakenExtractor.Parse(timestamp);
+		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
+	}
 }
