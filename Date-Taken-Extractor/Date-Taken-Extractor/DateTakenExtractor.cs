@@ -55,7 +55,10 @@ public static class DateTakenExtractor
 	{
 		if (filename == null) throw new ArgumentNullException(nameof(filename));
 		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
-		return AnalyzeFilename(filename, out dateTakenSrc);
+		
+		DateTime? dateTaken = AnalyzeFilename(filename);
+		dateTakenSrc = dateTaken != null ? DateTakenSrc.Filename : DateTakenSrc.None;
+		return dateTaken;
 	}
 	
 	// ///<summary>Get Date Taken from metadata AND the filename.</summary>
@@ -72,9 +75,8 @@ public static class DateTakenExtractor
 
 	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
-	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	private static DateTime? AnalyzeExif(string fullPath, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeExif(string fullPath)
 	{
 		try
 		{
@@ -82,41 +84,26 @@ public static class DateTakenExtractor
 			ExifSubIfdDirectory directory = directories.OfType<ExifSubIfdDirectory>().First();
 
 			//Check at most three different places for possible DT Exif metadata.
-			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeDigitized, out DateTime result))
-			{
-				dateTakenSrc = DateTakenSrc.Metadata;
-				return result;
-			}
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeDigitized, out DateTime result)) return result;
 
 			//In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
-			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out result))
-			{
-				dateTakenSrc = DateTakenSrc.Metadata;
-				return result;
-			}
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out result)) return result;
 
 			//In testing, this tag never had data but including it anyways just in case.
-			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTime, out result))
-			{
-			    dateTakenSrc = DateTakenSrc.Metadata;
-			    return result;
-		    }
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTime, out result)) return result;
 
-		    dateTakenSrc = DateTakenSrc.None;
-		    return null; //No DT metadata in file.
+			return null; //No DT metadata in file.
 	    }
 	    catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
 	    {
-		    dateTakenSrc = DateTakenSrc.None;
-			return null; //No DT metadata in file.
+			return null;
 	    }
     }
 
 	///<summary>Analyzes the QuickTime metadata (if any) of a (usually video) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
-	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	private static DateTime? AnalyzeQuickTime(string fullPath, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeQuickTime(string fullPath)
 	{
 		try
 		{
@@ -124,42 +111,31 @@ public static class DateTakenExtractor
 			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
 
 			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
-			{
-				dateTakenSrc = DateTakenSrc.Metadata;
 				return dateTaken;
-			}
 
-			dateTakenSrc = DateTakenSrc.None;
 			return null; //No DT metadata in file.
 		}
 		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //In testing, UnauthorizedAccessExceptions only happened for Switch clips. InvalidOperationExceptions can happen when no metadata in file.
 		{
-			dateTakenSrc = DateTakenSrc.None;
-			return null; //No DT metadata in file.
+			return null;
 		}
 	}
 	
 	///<summary>Analyzes a filename to see if it has a timestamp in it.</summary>
 	///<param name="filename">The filename to analyze, with or without the file extension.</param>
-	///<param name="dateTakenSrc">If this filename had a valid timestamp, dateTakenSrc is set to 'Filename'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the timestamp that was found in the file. null if couldn't find a timestamp.</returns>
-	private static DateTime? AnalyzeFilename(string filename, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeFilename(string filename)
 	{
 		//Each thing in () is considered a group. First part is for the junk data. Adds it to a group so it stays away from the other useful groups. I think it only comes from Steam screenshots.
 		//The '[-_\. ]?' handle the presence or absence of separator characters (' ', '-', '_', '.') present in most filenames, like 'IMG_20210320_175909.jpg', 'Capture 2020-12-26 21_03_05.png', and '2020-10-06_13.53.33.png'.
 		const string PATTERN = @"(\d+[-_\.: ])?(\d{4})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})";
 		MatchCollection matches = new Regex(PATTERN).Matches(filename);
-		if (matches.Count == 0) //.Count should only ever be 0 or 1 with this pattern, since there should only ever be 0 or 1 matches.
-		{
-			dateTakenSrc = DateTakenSrc.None;
-			return null;
-		}
-		
+		if (matches.Count == 0) return null; //.Count should only ever be 0 or 1 with this pattern, since there should only ever be 0 or 1 matches.
+
 		//groups[0] is the whole match that was returned, which may or may not contain extra junk data that isn't used, like extension, and other characters.
 		//groups[1] could contain some extra junk at the start of the filename, (e.g., 105600 from Steam screenshots), so it's ignored.
 		//groups[2] is the year, groups[3] is the month, etc.
 		GroupCollection groups = matches[0].Groups;
-		dateTakenSrc = DateTakenSrc.Filename;
 		return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}");
 	}
 
