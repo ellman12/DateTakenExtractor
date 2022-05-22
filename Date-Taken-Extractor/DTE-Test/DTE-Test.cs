@@ -147,4 +147,41 @@ public class DTE_Test
 		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
 		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
 	}
+
+	[Theory]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20201012_142818.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20200930_113226.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/20200926_192817~2.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-147976829.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-623473932.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-797174449.mp4")]
+	[InlineData("2018-11-03 07-26-12")]
+	[InlineData("2018:11:03 07:26:12")]
+	[InlineData("20181103072612")]
+	[InlineData("2018 11 03 07 26 12")]
+	[InlineData("2018-11-03 07:26:12")]
+	[InlineData("IMG_20210320_175909.jpg")] //Android camera
+	[InlineData("105600_20201226210642_1.png")] //Steam screenshots I think
+	[InlineData("20201224140504_1.jpg")]
+	[InlineData("Screenshot 2020-11-24 102029.png")] //Snip & Sketch
+	[InlineData("Saved Clip 20201107143123.png")] //No idea
+	[InlineData("Screenshot_2020-10-28_135904.png")] //No idea
+	[InlineData("Screenshot_20210426-122329_Messages.jpg")] //Android screenshot
+	[InlineData("2020-10-06_13.53.33.png")] //Minecraft I think
+	[InlineData("Capture 2020-12-26 21_03_05.png")] //Terraria screenshot tool
+	[InlineData("Snapchat-652999454.jpg")] //Random filename from saved Snapchat media
+	[InlineData("652999454.jpg")] //Random name I made
+	[InlineData("not a timestamp lol.jpg")] //Random name I made
+	[InlineData("2022031620532000_s.mp4")] //N Switch filename
+	public void GetDateTakenFromFilenameTest(string filename)
+	{
+		_testOutputHelper.WriteLine(filename);
+		
+		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
+		
+		DateTime? result = DateTakenExtractor.AnalyzeFilename(filename, out DateTakenExtractor.DateTakenSrc dateTakenSrc);
+		_testOutputHelper.WriteLine(filename);
+		_testOutputHelper.WriteLine(result.ToString());
+		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
+	}
 }

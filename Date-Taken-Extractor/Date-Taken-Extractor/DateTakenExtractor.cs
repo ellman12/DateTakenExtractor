@@ -46,14 +46,16 @@ public static class DateTakenExtractor
 	//}
 
 	///<summary>Get Date Taken metadata from just the filename.</summary>
-	///<param name="fullPath">The full path to the file.</param>
-	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	///<returns>The Date Taken that was found in the filename, otherwise null.</returns>
-	public static DateTime? GetDateTakenFromFilename(string fullPath)
+	///<param name="filename">The filename to analyze. You <i>can</i> also give it the full path to the file and it <i>might</i> work, but passing in just the filename is preferred.</param>
+	///<param name="dateTakenSrc">'Filename' if this filename had a timestamp, 'None' if it didn't and if DT is null.</param>
+	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
+	///<exception cref="FileNotFoundException">Thrown if filename is a file that doesn't exist.</exception>
+	///<returns>A DateTime? representing the Date Taken that was found in the filename, otherwise null.</returns>
+	public static DateTime? GetDateTakenFromFilename(string filename, out DateTakenSrc dateTakenSrc)
 	{
-		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
+		if (filename == null) throw new ArgumentNullException(nameof(filename));
+		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
+		return AnalyzeFilename(filename, out dateTakenSrc);
 	}
 	
 	// ///<summary>Get Date Taken from metadata AND the filename.</summary>
