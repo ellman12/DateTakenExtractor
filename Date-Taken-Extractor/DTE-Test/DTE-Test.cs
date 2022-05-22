@@ -138,7 +138,8 @@ public class DTE_Test
 	public void QuickTimeTest(string fullPath)
 	{
 		_testOutputHelper.WriteLine(fullPath);
-		DateTime? result = DateTakenExtractor.AnalyzeQuickTime(fullPath);
+		DateTime? result = DateTakenExtractor.AnalyzeQuickTime(fullPath, out DateTakenExtractor.DateTakenSrc dateTakenSrc);
 		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
+		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
 	}
 }
