@@ -75,21 +75,27 @@ public static class DateTakenExtractor
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	public static DateTime? AnalyzeExif(string fullPath)
     {
-	    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
-	    ExifSubIfdDirectory subIfdDirectory = directories.OfType<ExifSubIfdDirectory>().First();
-	    
-	    //Check at most three different places for possible DT Exif metadata.
-		string? dtDigitized = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeDigitized);
-		if (dtDigitized != null) return Parse(dtDigitized);
+	    try
+	    {
+		    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
+		    ExifSubIfdDirectory subIfdDirectory = directories.OfType<ExifSubIfdDirectory>().First();
 
-		//In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
-		string? dtOriginal = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeOriginal);
-		if (dtOriginal != null) return Parse(dtOriginal);
+		    //Check at most three different places for possible DT Exif metadata.
+		    string? dtDigitized = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeDigitized);
+		    if (dtDigitized != null) return Parse(dtDigitized);
 
-		//In testing, this tag never had data but including it anyways just in case.
-		string? dt = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
-		if (dt != null) return Parse(dt);
+		    //In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
+		    string? dtOriginal = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeOriginal);
+		    if (dtOriginal != null) return Parse(dtOriginal);
 
+		    //In testing, this tag never had data but including it anyways just in case.
+		    string? dt = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
+		    if (dt != null) return Parse(dt);
+	    }
+	    catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
+	    {
+			return null; //No DT metadata in file.
+	    }
 		return null; //No DT metadata in file.
     }
 
