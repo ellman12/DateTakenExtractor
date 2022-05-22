@@ -1,4 +1,6 @@
 using System.Text.RegularExpressions;
+using MetadataExtractor;
+using MetadataExtractor.Formats.Exif;
 
 namespace Date_Taken_Extractor;
 
@@ -83,6 +85,30 @@ public static class DateTakenExtractor
 		GroupCollection groups = matches[0].Groups;
 		return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}");
 	}
+	
+	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
+	///<param name="fullPath">Full path to the item to analyze.</param>
+	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
+	public static DateTime? AnalyzeExif(string fullPath)
+    {
+	    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
+	    ExifSubIfdDirectory subIfdDirectory = directories.OfType<ExifSubIfdDirectory>().First();
+	    
+	    //Check at most three different places for possible DT Exif metadata.
+		string? dtDigitized = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeDigitized);
+		if (dtDigitized != null) return Parse(dtDigitized);
+
+		//In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
+		string? dtOriginal = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeOriginal);
+		if (dtOriginal != null) return Parse(dtOriginal);
+
+		//In testing, this tag never had data but including it anyways just in case.
+		string? dt = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
+		if (dt != null) return Parse(dt);
+
+		return null; //No Date Taken data present.
+    }
+
 	///<summary>Take a timestamp string like '2018-11-03 07:26:12', or of similar format, and attempt to parse and return a DateTime representing it.</summary>
 	///<param name="timestamp">The timestamp to attempt to parse.</param>
 	///<returns>A DateTime? representing the parsed timestamp. null if couldn't determine Date Taken.</returns>

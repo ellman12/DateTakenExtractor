@@ -70,6 +70,33 @@ public class DTE_Test
 	{
 		_testOutputHelper.WriteLine(DateTakenExtractor.AnalyzeFilename(filename).ToString());
 	}
+	
+	[Theory]
+	[InlineData("2018/3 March/4/2018030420412600_s.jpg")]
+	[InlineData("2018/3 March/10/2018031020470000_s.jpg")]
+	[InlineData("2018/11 November/3/20181103_072612.jpg")]
+	[InlineData("2021/4 April/26/IMG_20210426_145048.jpg")]
+	[InlineData("2021/4 April/13/IMG_20210413_101850.jpg")]
+	[InlineData("Unknown Date Taken/tempFileForShare_20220418-191816.jpg")]
+	//Ones that shouldn't have any
+	[InlineData("2022/3 March/16/2022031620491000_s.mp4")]
+	[InlineData("2021/4 April/29/VID_20210429_160512.mp4")]
+	[InlineData("Unknown Date Taken/3ujy8xj4rwl41.png")]
+	[InlineData("Unknown Date Taken/9apf2enw6uy71.png")]
+	[InlineData("Unknown Date Taken/FB_IMG_1641842532651.jpg")]
+	[InlineData("Unknown Date Taken/botw.png")]
+	[InlineData("Unknown Date Taken/image0-1.jpg")]
+	[InlineData("Unknown Date Taken/thumb_1625481238683-1293588774.jpg")]
+	[InlineData("Unknown Date Taken/messages_0.jpeg")]
+	[InlineData("Unknown Date Taken/usw7p5qwzld71.jpg")]
+	//Common filename timestamp formats I've encountered, with a few non-timestamps.
+	public void ExifTest(string fullPath)
+	{
+		fullPath = Path.Combine("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/", fullPath);
+		DateTime? result = DateTakenExtractor.AnalyzeExif(fullPath);
+		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
+	}
+
 	[Theory]
 	[InlineData("2018-11-03 07-26-12")]
 	[InlineData("2018:11:03 07:26:12")]
