@@ -108,4 +108,39 @@ public class DTE_Test
 		DateTime? result = DateTakenExtractor.Parse(timestamp);
 		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
 	}
+
+	[Theory]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/DSC_6663.MOV")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_0122.MOV")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_0841.MOV")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_1027.MOV")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_4418.mov")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/TWUC6365.MOV")]
+	[InlineData("C:/Users/Elliott/Videos/test/20210501_193046.mp4")]
+	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2018/3 March/17/2018031720595600_s.mp4")]
+	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/4 April/17/VID_20220417_085545.mp4")]
+	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/4 April/26/VID_20220426_085300.mp4")]
+	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/5 May/10/VID_20220510_173424.mp4")]
+	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/1 January/1/2022010120534400_s.mp4")]
+	public void QuickTimeTest(string fullPath)
+	{
+		_testOutputHelper.WriteLine(fullPath);
+		try
+		{
+			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(new FileStream(fullPath, FileMode.Open));
+			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
+
+			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
+			{
+				_testOutputHelper.WriteLine(dateTaken.ToString());
+				return;
+			}
+			
+			_testOutputHelper.WriteLine("null");
+		}
+		catch (UnauthorizedAccessException) //In testing, this only happened for Switch clips.
+		{
+			_testOutputHelper.WriteLine("null");
+		}
+	}
 }

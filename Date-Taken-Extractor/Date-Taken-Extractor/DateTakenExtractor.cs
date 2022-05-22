@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
+using MetadataExtractor.Formats.QuickTime;
 
 namespace Date_Taken_Extractor;
 
@@ -108,6 +109,29 @@ public static class DateTakenExtractor
 
 		return null; //No Date Taken data present.
     }
+
+	///<summary>Analyzes the QuickTime metadata (if any) of a (usually video) file.</summary>
+	///<param name="fullPath">Full path to the item to analyze.</param>
+	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
+	public static DateTime? AnalyzeQuickTime(string fullPath)
+	{
+		try
+		{
+			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(new FileStream(fullPath, FileMode.Open));
+			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
+
+			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
+			{
+				return dateTaken;
+			}
+			
+			return null; //No DT metadata in file.
+		}
+		catch (UnauthorizedAccessException) //In testing, this only happened for Switch clips.
+		{
+			return null;
+		}
+	}
 
 	///<summary>Take a timestamp string like '2018-11-03 07:26:12', or of similar format, and attempt to parse and return a DateTime representing it.</summary>
 	///<param name="timestamp">The timestamp to attempt to parse.</param>
