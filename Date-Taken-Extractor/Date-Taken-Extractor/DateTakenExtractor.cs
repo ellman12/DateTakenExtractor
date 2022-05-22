@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
-using MetadataExtractor.Formats.Png;
 using MetadataExtractor.Formats.QuickTime;
 
 namespace Date_Taken_Extractor;
@@ -23,38 +22,38 @@ public static class DateTakenExtractor
 	}
 
 	/*
-	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't, looks in the filename. If no data in both, return null.</summary>
+	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find any, looks in the filename. If no data in both, return null.</summary>
 	///<param name="fullPath">The full path to the file.</param>
 	///<param name="dateTaken">The DateTime? variable to store the Date Taken in.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	///<exception cref="ArgumentException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	///<returns>DateTakenSrc enum representing where the Date Taken came from.</returns>
 	public static DateTakenSrc GetDateTimeAuto(string fullPath, out DateTime? dateTaken)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-		if (!File.Exists(fullPath)) throw new ArgumentException("File specified does not exist.");
+		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
 	}
 	
 	///<summary>Date Taken metadata from just the file's internal metadata.</summary>
 	///<param name="fullPath">The full path to the file.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	///<exception cref="ArgumentException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
 	public static DateTime? GetDateTakenFromMetadata(string fullPath)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-		if (!File.Exists(fullPath)) throw new ArgumentException("File specified does not exist.");
+		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
 	}
 
 	///<summary>Get Date Taken metadata from just the filename.</summary>
 	///<param name="fullPath">The full path to the file.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	///<exception cref="ArgumentException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	///<returns>The Date Taken that was found in the filename, otherwise null.</returns>
 	public static DateTime? GetDateTakenFromFilename(string fullPath)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-		if (!File.Exists(fullPath)) throw new ArgumentException("File specified does not exist.");
+		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
 	}
 	
 	///<summary>Get Date Taken from metadata AND the filename.</summary>
@@ -62,13 +61,12 @@ public static class DateTakenExtractor
 	///<param name="metadataDT">The DateTime? variable to store the metadata Date Taken in.</param>
 	///<param name="filenameDT">The DateTime? variable to store the filename Date Taken in.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	///<exception cref="ArgumentException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	public static void GetDateTakenFromBoth(string fullPath, out DateTime? metadataDT, out DateTime? filenameDT)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-		if (!File.Exists(fullPath)) throw new ArgumentException("File specified does not exist.");
-	}
-	*/
+		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
+	}*/
 
 	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
