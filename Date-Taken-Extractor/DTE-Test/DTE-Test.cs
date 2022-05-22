@@ -93,8 +93,10 @@ public class DTE_Test
 	public void ExifTest(string fullPath)
 	{
 		fullPath = Path.Combine("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/", fullPath);
-		DateTime? result = DateTakenExtractor.AnalyzeExif(fullPath);
+		_testOutputHelper.WriteLine(fullPath);
+		DateTime? result = DateTakenExtractor.AnalyzeExif(fullPath, out DateTakenExtractor.DateTakenSrc dateTakenSrc);
 		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
+		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
 	}
 
 	[Theory]

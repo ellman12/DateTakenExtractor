@@ -24,11 +24,11 @@ public static class DateTakenExtractor
 
 	/*
 	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't, looks in the filename. If no data in both, return null.</summary>
-	/// <param name="fullPath">The full path to the file.</param>
-	/// <param name="dateTaken">The DateTime? variable to store the Date Taken in.</param>
+	///<param name="fullPath">The full path to the file.</param>
+	///<param name="dateTaken">The DateTime? variable to store the Date Taken in.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
 	///<exception cref="ArgumentException">Thrown if fullPath is a file that doesn't exist.</exception>
-	/// <returns>DateTakenSrc enum representing where the Date Taken came from.</returns>
+	///<returns>DateTakenSrc enum representing where the Date Taken came from.</returns>
 	public static DateTakenSrc GetDateTimeAuto(string fullPath, out DateTime? dateTaken)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
@@ -72,36 +72,49 @@ public static class DateTakenExtractor
 
 	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
+	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	public static DateTime? AnalyzeExif(string fullPath)
-    {
-	    try
-	    {
-		    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
-		    ExifSubIfdDirectory subIfdDirectory = directories.OfType<ExifSubIfdDirectory>().First();
+	public static DateTime? AnalyzeExif(string fullPath, out DateTakenSrc dateTakenSrc)
+	{
+		try
+		{
+			IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
+			ExifSubIfdDirectory directory = directories.OfType<ExifSubIfdDirectory>().First();
 
-		    //Check at most three different places for possible DT Exif metadata.
-		    string? dtDigitized = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeDigitized);
-		    if (dtDigitized != null) return Parse(dtDigitized);
+			//Check at most three different places for possible DT Exif metadata.
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeDigitized, out DateTime result))
+			{
+				dateTakenSrc = DateTakenSrc.Metadata;
+				return result;
+			}
 
-		    //In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
-		    string? dtOriginal = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTimeOriginal);
-		    if (dtOriginal != null) return Parse(dtOriginal);
+			//In testing, this tag (I think) always had the same value as Digitized, but including it anyways just in case.
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out result))
+			{
+				dateTakenSrc = DateTakenSrc.Metadata;
+				return result;
+			}
 
-		    //In testing, this tag never had data but including it anyways just in case.
-		    string? dt = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
-		    if (dt != null) return Parse(dt);
+			//In testing, this tag never had data but including it anyways just in case.
+			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTime, out result))
+			{
+			    dateTakenSrc = DateTakenSrc.Metadata;
+			    return result;
+		    }
+
+		    dateTakenSrc = DateTakenSrc.None;
+		    return null; //No DT metadata in file.
 	    }
 	    catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
 	    {
+		    dateTakenSrc = DateTakenSrc.None;
 			return null; //No DT metadata in file.
 	    }
-		return null; //No DT metadata in file.
     }
 
 	///<summary>Analyzes the QuickTime metadata (if any) of a (usually video) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
-	/// <param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
+	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	public static DateTime? AnalyzeQuickTime(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
