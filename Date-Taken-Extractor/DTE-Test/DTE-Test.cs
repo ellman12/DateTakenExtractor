@@ -68,7 +68,10 @@ public class DTE_Test
 	[InlineData("2022031620532000_s.mp4")] //N Switch filename
 	public void FilenameTest(string filename)
 	{
-		_testOutputHelper.WriteLine(DateTakenExtractor.AnalyzeFilename(filename).ToString());
+		_testOutputHelper.WriteLine(filename);
+		DateTime? result = DateTakenExtractor.AnalyzeFilename(filename, out DateTakenExtractor.DateTakenSrc dateTakenSrc);
+		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
+		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
 	}
 	
 	[Theory]
