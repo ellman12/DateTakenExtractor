@@ -90,7 +90,7 @@ public static class DateTakenExtractor
 		string? dt = subIfdDirectory.GetDescription(ExifDirectoryBase.TagDateTime);
 		if (dt != null) return Parse(dt);
 
-		return null; //No Date Taken data present.
+		return null; //No DT metadata in file.
     }
 
 	///<summary>Analyzes the QuickTime metadata (if any) of a (usually video) file.</summary>
@@ -110,9 +110,9 @@ public static class DateTakenExtractor
 			
 			return null; //No DT metadata in file.
 		}
-		catch (UnauthorizedAccessException) //In testing, this only happened for Switch clips.
+		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //In testing, UnauthorizedAccessExceptions only happened for Switch clips. InvalidOperationExceptions can happen when no metadata in file.
 		{
-			return null;
+			return null; //No DT metadata in file.
 		}
 	}
 	

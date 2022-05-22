@@ -117,30 +117,28 @@ public class DTE_Test
 	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_4418.mov")]
 	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/TWUC6365.MOV")]
 	[InlineData("C:/Users/Elliott/Videos/test/20210501_193046.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/2022-05-22 11-40-06.mkv")]
 	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2018/3 March/17/2018031720595600_s.mp4")]
 	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/4 April/17/VID_20220417_085545.mp4")]
 	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/4 April/26/VID_20220426_085300.mp4")]
 	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/5 May/10/VID_20220510_173424.mp4")]
 	[InlineData("D:/My Backups/Sorted Pics and Vids From Phone, Switch, and Elsewhere 5-17-2022/2022/1 January/1/2022010120534400_s.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20201128_102401_LS.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20201128_102243_LS.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/f0a3169434bc27ddf5fb118e8bfce9b93ff18cce.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/f0a3169434bc27ddf5fb118e8bfce9b93ff18cce~2.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/29e5607b885099d7ba2d3fbb88e3328a9ba92ecc.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/29e5607b885099d7ba2d3fbb88e3328a9ba92ecc~2.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20201012_142818.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/VID_20200930_113226.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/20200926_192817~2.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-147976829.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-623473932.mp4")]
+	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/Snapchat-797174449.mp4")]
 	public void QuickTimeTest(string fullPath)
 	{
 		_testOutputHelper.WriteLine(fullPath);
-		try
-		{
-			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(new FileStream(fullPath, FileMode.Open));
-			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
-
-			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
-			{
-				_testOutputHelper.WriteLine(dateTaken.ToString());
-				return;
-			}
-			
-			_testOutputHelper.WriteLine("null");
-		}
-		catch (UnauthorizedAccessException) //In testing, this only happened for Switch clips.
-		{
-			_testOutputHelper.WriteLine("null");
-		}
+		DateTime? result = DateTakenExtractor.AnalyzeQuickTime(fullPath);
+		_testOutputHelper.WriteLine(result == null ? "null" : result.ToString());
 	}
 }
