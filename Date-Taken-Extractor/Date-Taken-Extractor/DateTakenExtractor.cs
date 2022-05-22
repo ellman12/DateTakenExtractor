@@ -145,7 +145,7 @@ public static class DateTakenExtractor
 	{
 		//Each thing in () is considered a group. First part is for the junk data. Adds it to a group so it stays away from the other useful groups. I think it only comes from Steam screenshots.
 		//The '[-_\. ]?' handle the presence or absence of separator characters (' ', '-', '_', '.') present in most filenames, like 'IMG_20210320_175909.jpg', 'Capture 2020-12-26 21_03_05.png', and '2020-10-06_13.53.33.png'.
-		const string PATTERN = @"(\d+[-_ ])?(\d{4})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})[-_\. ]?(\d{2})";
+		const string PATTERN = @"(\d+[-_\.: ])?(\d{4})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})[-_\.: ]?(\d{2})";
 		MatchCollection matches = new Regex(PATTERN).Matches(filename);
 		if (matches.Count == 0) //.Count should only ever be 0 or 1 with this pattern, since there should only ever be 0 or 1 matches.
 		{
