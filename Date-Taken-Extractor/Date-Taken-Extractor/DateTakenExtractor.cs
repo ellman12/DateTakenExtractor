@@ -57,7 +57,7 @@ public static class DateTakenExtractor
 		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
 		
 		DateTime? dateTaken = AnalyzeFilename(filename);
-		dateTakenSrc = dateTaken != null ? DateTakenSrc.Filename : DateTakenSrc.None;
+		dateTakenSrc = dateTaken == null ? DateTakenSrc.None : DateTakenSrc.Filename;
 		return dateTaken;
 	}
 	
