@@ -74,7 +74,7 @@ public static class DateTakenExtractor
 	///<param name="fullPath">Full path to the item to analyze.</param>
 	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	public static DateTime? AnalyzeExif(string fullPath, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeExif(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
 		try
 		{
@@ -116,7 +116,7 @@ public static class DateTakenExtractor
 	///<param name="fullPath">Full path to the item to analyze.</param>
 	///<param name="dateTakenSrc">If this file had DT metadata, dateTakenSrc is set to 'Metadata'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	public static DateTime? AnalyzeQuickTime(string fullPath, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeQuickTime(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
 		try
 		{
@@ -143,7 +143,7 @@ public static class DateTakenExtractor
 	///<param name="filename">The filename to analyze, with or without the file extension.</param>
 	///<param name="dateTakenSrc">If this filename had a valid timestamp, dateTakenSrc is set to 'Filename'. If it doesn't, it's set to 'None'.</param>
 	///<returns>A DateTime? representing the timestamp that was found in the file. null if couldn't find a timestamp.</returns>
-	public static DateTime? AnalyzeFilename(string filename, out DateTakenSrc dateTakenSrc)
+	private static DateTime? AnalyzeFilename(string filename, out DateTakenSrc dateTakenSrc)
 	{
 		//Each thing in () is considered a group. First part is for the junk data. Adds it to a group so it stays away from the other useful groups. I think it only comes from Steam screenshots.
 		//The '[-_\. ]?' handle the presence or absence of separator characters (' ', '-', '_', '.') present in most filenames, like 'IMG_20210320_175909.jpg', 'Capture 2020-12-26 21_03_05.png', and '2020-10-06_13.53.33.png'.
@@ -166,7 +166,7 @@ public static class DateTakenExtractor
 	///<summary>Take a timestamp string like '2018-11-03 07:26:12', or of similar format, and attempt to parse and return a DateTime representing it.</summary>
 	///<param name="timestamp">The timestamp to attempt to parse.</param>
 	///<returns>A DateTime? representing the parsed timestamp. null if couldn't determine Date Taken.</returns>
-	public static DateTime? Parse(string timestamp)
+	private static DateTime? Parse(string timestamp)
 	{
 		try
 		{
