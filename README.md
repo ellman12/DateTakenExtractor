@@ -31,7 +31,7 @@ DateTakenExtractor is very simple to use. The class contains four public methods
 
 ```c#
 //First checks the metadata, then the filename, for the Date Taken (DT) data.
-DateTime? autoResult = DateTakenExtractor.GetDateTimeAuto("C:/yourfilehere.jpg", out DateTakenSrc dateTakenSrc);
+DateTime? autoResult = DateTakenExtractor.GetDateTakenAuto("C:/yourfilehere.jpg", out DateTakenSrc dateTakenSrc);
 
 //Checks only the metadata of the file for DT data.
 DateTime? metadataResult = DateTakenExtractor.GetDateTakenFromMetadata("C:/yourfilehere.jpg");

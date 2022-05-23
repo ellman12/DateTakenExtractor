@@ -28,7 +28,7 @@ public static class DateTakenExtractor
 	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found, otherwise null.</returns>
-	public static DateTime? GetDateTimeAuto(string fullPath, out DateTakenSrc dateTakenSrc)
+	public static DateTime? GetDateTakenAuto(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
 		DateTime? result = GetDateTakenFromMetadata(fullPath);
 		if (result != null)

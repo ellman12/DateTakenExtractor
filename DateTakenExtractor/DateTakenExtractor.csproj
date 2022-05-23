@@ -5,7 +5,7 @@
         <RootNamespace>DateTakenExtractor</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageId>Date-Taken-Extractor</PackageId>
+        <PackageId>DateTakenExtractor</PackageId>
         <Authors>ellman12</Authors>
         <Product>DateTakenExtractor</Product>
         <Description>Small, fast, simple library for extracting Date Taken metadata from photos and videos.</Description>
@@ -19,6 +19,8 @@
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
+        <Version>1.0.1</Version>
+        <PackageReleaseNotes>Fix a method name.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
