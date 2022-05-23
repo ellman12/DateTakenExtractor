@@ -1,5 +1,8 @@
 # DateTakenExtractor
 
+[![DateTakenExtractor NuGet version](https://img.shields.io/nuget/v/DateTakenExtractor)](https://www.nuget.org/packages/DateTakenExtractor/)
+[![DateTakenExtractor Nuget download count](https://img.shields.io/nuget/dt/DateTakenExtractor)](https://www.nuget.org/packages/DateTakenExtractor/)
+
 DateTakenExtractor (DTE) is a small, fast, simple library for extracting Date Taken metadata from photos and videos, with the library consisting of only a single ```static``` C# class.
 
 This library came into existence because two separate projects of mine used the same classes/packages for finding this data, and trying to keep those two files the same was annoying and difficult. I also wanted to redo the class used in those two projects to be smaller, simpler, and better.
