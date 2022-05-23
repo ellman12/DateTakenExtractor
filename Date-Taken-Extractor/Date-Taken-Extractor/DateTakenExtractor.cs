@@ -85,17 +85,19 @@ public static class DateTakenExtractor
 		return dateTaken;
 	}
 	
-	// ///<summary>Get Date Taken from metadata AND the filename.</summary>
-	// ///<param name="fullPath">The full path to the file.</param>
-	// ///<param name="metadataDT">The DateTime? variable to store the metadata Date Taken in.</param>
-	// ///<param name="filenameDT">The DateTime? variable to store the filename Date Taken in.</param>
-	// ///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	// ///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	// public static void GetDateTakenFromBoth(string fullPath, out DateTime? metadataDT, out DateTime? filenameDT)
-	// {
-	// 	if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-	// 	if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
-	// }
+	///<summary>Get Date Taken from both metadata AND the filename.</summary>
+	///<param name="fullPath">The full path to the file.</param>
+	///<param name="metadataDT">The DateTime? variable to store the metadata Date Taken in.</param>
+	///<param name="filenameDT">The DateTime? variable to store the filename Date Taken in.</param>
+	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
+	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
+	public static void GetDateTakenFromBoth(string fullPath, out DateTime? metadataDT, out DateTime? filenameDT)
+	{
+		metadataDT = GetDateTakenFromMetadata(fullPath, out _);
+		filenameDT = GetDateTakenFromFilename(fullPath, out _);
+	}
 
 	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
