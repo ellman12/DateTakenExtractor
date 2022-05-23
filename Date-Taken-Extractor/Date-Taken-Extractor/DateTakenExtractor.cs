@@ -21,40 +21,40 @@ public static class DateTakenExtractor
 		None
 	}
 
-	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find any, looks in the filename. If no data in both, return null.</summary>
+	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find a DT in the metadata, looks in the filename. If no data in both, return null.</summary>
 	///<param name="fullPath">The full path to the file.</param>
 	///<param name="dateTakenSrc">'Metadata' if found DT in metadata. 'Filename' if DT came from filename. 'None' if no DT found and thus DT is null.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
 	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
+	///<returns>A DateTime? representing the Date Taken that was found, otherwise null.</returns>
 	public static DateTime? GetDateTimeAuto(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
-		DateTime? metadataDT = GetDateTakenFromMetadata(fullPath, out dateTakenSrc);
-		if (metadataDT != null)
+		DateTime? result = GetDateTakenFromMetadata(fullPath, out dateTakenSrc);
+		if (result != null)
 		{
 			dateTakenSrc = DateTakenSrc.Metadata;
-			return metadataDT;
+			return result;
 		}
 		
-		DateTime? filenameDT = GetDateTakenFromFilename(fullPath, out dateTakenSrc);
-		if (filenameDT != null)
+		result = GetDateTakenFromFilename(fullPath, out dateTakenSrc);
+		if (result != null)
 		{
 			dateTakenSrc = DateTakenSrc.Filename;
-			return filenameDT;
+			return result;
 		}
 
 		dateTakenSrc = DateTakenSrc.None;
 		return null;
 	}
 	
-	///<summary>Date Taken metadata from just the file's internal metadata.</summary>
+	///<summary>Attempt to get Date Taken metadata from just the file's internal metadata.</summary>
 	///<param name="fullPath">The full path to the file.</param>
-	///<param name="dateTakenSrc">'Filename' if this filename had a timestamp, 'None' if it didn't and if DT is null.</param>
+	///<param name="dateTakenSrc">'Metadata' if this file had DT metadata, 'None' if it didn't and thus DT is null.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
 	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
+	///<returns>A DateTime? representing the Date Taken that was found in the metadata, otherwise null.</returns>
 	public static DateTime? GetDateTakenFromMetadata(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
@@ -89,6 +89,7 @@ public static class DateTakenExtractor
 	///<param name="dateTakenSrc">'Filename' if this filename had a timestamp, 'None' if it didn't and if DT is null.</param>
 	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found in the filename, otherwise null.</returns>
+	///<remarks>If you pass in a full path instead of a filename, it will attempt to strip out the extra characters and get just the filename, which is then used.</remarks>
 	public static DateTime? GetDateTakenFromFilename(string filename, out DateTakenSrc dateTakenSrc)
 	{
 		if (filename == null) throw new ArgumentNullException(nameof(filename));
@@ -99,21 +100,20 @@ public static class DateTakenExtractor
 		return dateTaken;
 	}
 	
-	///<summary>Get Date Taken from both metadata AND the filename.</summary>
+	///<summary>Get Date Taken from both metadata AND the filename, when possible.</summary>
 	///<param name="fullPath">The full path to the file.</param>
 	///<param name="metadataDT">The DateTime? variable to store the metadata Date Taken in.</param>
 	///<param name="filenameDT">The DateTime? variable to store the filename Date Taken in.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
 	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
 	public static void GetDateTakenFromBoth(string fullPath, out DateTime? metadataDT, out DateTime? filenameDT)
 	{
 		metadataDT = GetDateTakenFromMetadata(fullPath, out _);
 		filenameDT = GetDateTakenFromFilename(fullPath, out _);
 	}
 
-	///<summary>Analyzes the Exif metadata (if any) of a (usually image) file.</summary>
+	///<summary>Analyzes the Exif metadata (if any) of an image file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	private static DateTime? AnalyzeExif(string fullPath)
@@ -140,7 +140,7 @@ public static class DateTakenExtractor
 	    }
     }
 
-	///<summary>Analyzes the QuickTime metadata (if any) of a (usually video) file.</summary>
+	///<summary>Analyzes the QuickTime metadata (if any) of a video file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	private static DateTime? AnalyzeQuickTime(string fullPath)
