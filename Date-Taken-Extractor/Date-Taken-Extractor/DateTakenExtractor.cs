@@ -21,18 +21,32 @@ public static class DateTakenExtractor
 		None
 	}
 
-	
-	/////<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find any, looks in the filename. If no data in both, return null.</summary>
-	/////<param name="fullPath">The full path to the file.</param>
-	/////<param name="dateTaken">The DateTime? variable to store the Date Taken in.</param>
-	/////<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
-	/////<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
-	/////<returns>DateTakenSrc enum representing where the Date Taken came from.</returns>
-	//public static DateTakenSrc GetDateTimeAuto(string fullPath, out DateTime? dateTaken)
-	//{
-	//	if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
-	//	if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
-	//}
+	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find any, looks in the filename. If no data in both, return null.</summary>
+	///<param name="fullPath">The full path to the file.</param>
+	///<param name="dateTakenSrc">'Metadata' if found DT in metadata. 'Filename' if DT came from filename. 'None' if no DT found and thus DT is null.</param>
+	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
+	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
+	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
+	///<returns>The Date Taken that was found in the metadata, otherwise null.</returns>
+	public static DateTime? GetDateTimeAuto(string fullPath, out DateTakenSrc dateTakenSrc)
+	{
+		DateTime? metadataDT = GetDateTakenFromMetadata(fullPath, out dateTakenSrc);
+		if (metadataDT != null)
+		{
+			dateTakenSrc = DateTakenSrc.Metadata;
+			return metadataDT;
+		}
+		
+		DateTime? filenameDT = GetDateTakenFromFilename(fullPath, out dateTakenSrc);
+		if (filenameDT != null)
+		{
+			dateTakenSrc = DateTakenSrc.Filename;
+			return filenameDT;
+		}
+
+		dateTakenSrc = DateTakenSrc.None;
+		return null;
+	}
 	
 	///<summary>Date Taken metadata from just the file's internal metadata.</summary>
 	///<param name="fullPath">The full path to the file.</param>

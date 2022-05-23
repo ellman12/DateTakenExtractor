@@ -50,10 +50,11 @@ public class DTE_Test
 	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/IMG_1341.MOV")]
 	[InlineData("C:/Users/Elliott/Videos/test/Photos-001/TWUC6365.MOV")]
 	[InlineData("C:/Users/Elliott/Videos/test/angleordevil.png")]
-	public void GetDateTakenFromBothTest(string fullPath)
+	public void GetDateTimeAutoTest(string fullPath)
 	{
-		DateTakenExtractor.GetDateTakenFromBoth(fullPath, out DateTime? metadataDt, out DateTime? filenameDt);
-		_testOutputHelper.WriteLine(metadataDt.ToString());
-		_testOutputHelper.WriteLine(filenameDt.ToString());
+		_testOutputHelper.WriteLine(fullPath);
+		DateTime? result = DateTakenExtractor.GetDateTimeAuto(fullPath, out DateTakenExtractor.DateTakenSrc dateTakenSrc);
+		_testOutputHelper.WriteLine(result.ToString());
+		_testOutputHelper.WriteLine(dateTakenSrc.ToString());
 	}
 }
