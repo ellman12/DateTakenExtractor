@@ -30,14 +30,14 @@ public static class DateTakenExtractor
 	///<returns>A DateTime? representing the Date Taken that was found, otherwise null.</returns>
 	public static DateTime? GetDateTimeAuto(string fullPath, out DateTakenSrc dateTakenSrc)
 	{
-		DateTime? result = GetDateTakenFromMetadata(fullPath, out dateTakenSrc);
+		DateTime? result = GetDateTakenFromMetadata(fullPath);
 		if (result != null)
 		{
 			dateTakenSrc = DateTakenSrc.Metadata;
 			return result;
 		}
 		
-		result = GetDateTakenFromFilename(fullPath, out dateTakenSrc);
+		result = GetDateTakenFromFilename(fullPath);
 		if (result != null)
 		{
 			dateTakenSrc = DateTakenSrc.Filename;
@@ -50,53 +50,37 @@ public static class DateTakenExtractor
 	
 	///<summary>Attempt to get Date Taken metadata from just the file's internal metadata.</summary>
 	///<param name="fullPath">The full path to the file.</param>
-	///<param name="dateTakenSrc">'Metadata' if this file had DT metadata, 'None' if it didn't and thus DT is null.</param>
 	///<exception cref="ArgumentNullException">Thrown if fullPath is null.</exception>
 	///<exception cref="ArgumentException">Thrown if fullPath is not a valid path.</exception>
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found in the metadata, otherwise null.</returns>
-	public static DateTime? GetDateTakenFromMetadata(string fullPath, out DateTakenSrc dateTakenSrc)
+	public static DateTime? GetDateTakenFromMetadata(string fullPath)
 	{
 		if (fullPath == null) throw new ArgumentNullException(nameof(fullPath));
 		if (!Path.IsPathFullyQualified(fullPath)) throw new ArgumentException($"{fullPath} is not a valid path.");
 		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
 		
 		DateTime? dateTaken = null;
-		string ext = Path.GetExtension(fullPath).ToLower(); //Some files might have an extension that isn't all lowercase, like .MOV.
+		string ext = Path.GetExtension(fullPath).ToLower(); //Some files might have an extension that isn't all lowercase, like '.MOV'.
 		if (ext is ".jpg" or ".jpeg" or ".png" or ".gif") dateTaken = AnalyzeExif(fullPath);
 		if (ext is ".mp4" or ".mov" or ".mkv") dateTaken = AnalyzeQuickTime(fullPath);
+		if (dateTaken != null) return dateTaken; //Found DT in metadata.
 
-		if (dateTaken != null) //Found DT in metadata.
-		{
-			dateTakenSrc = DateTakenSrc.Metadata;
-			return dateTaken;
-		}
-		
 		dateTaken = AnalyzeFilename(Path.GetFileNameWithoutExtension(fullPath));
-		if (dateTaken != null) //Found DT in filename.
-		{
-			dateTakenSrc = DateTakenSrc.Filename;
-			return dateTaken;
-		}
-
-		//No DT in metadata or filename.
-		dateTakenSrc = DateTakenSrc.None;
-		return null;
+		return dateTaken; //← Could be null or an actual value from this ↑.
 	}
 
 	///<summary>Get Date Taken metadata from just the filename.</summary>
 	///<param name="filename">The filename to analyze. You <i>can</i> also give it the full path to the file and it <i>might</i> work, but passing in just the filename is preferred.</param>
-	///<param name="dateTakenSrc">'Filename' if this filename had a timestamp, 'None' if it didn't and if DT is null.</param>
 	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found in the filename, otherwise null.</returns>
 	///<remarks>If you pass in a full path instead of a filename, it will attempt to strip out the extra characters and get just the filename, which is then used.</remarks>
-	public static DateTime? GetDateTakenFromFilename(string filename, out DateTakenSrc dateTakenSrc)
+	public static DateTime? GetDateTakenFromFilename(string filename)
 	{
 		if (filename == null) throw new ArgumentNullException(nameof(filename));
 		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
 		
 		DateTime? dateTaken = AnalyzeFilename(filename);
-		dateTakenSrc = dateTaken == null ? DateTakenSrc.None : DateTakenSrc.Filename;
 		return dateTaken;
 	}
 	
@@ -109,8 +93,8 @@ public static class DateTakenExtractor
 	///<exception cref="FileNotFoundException">Thrown if fullPath is a file that doesn't exist.</exception>
 	public static void GetDateTakenFromBoth(string fullPath, out DateTime? metadataDT, out DateTime? filenameDT)
 	{
-		metadataDT = GetDateTakenFromMetadata(fullPath, out _);
-		filenameDT = GetDateTakenFromFilename(fullPath, out _);
+		metadataDT = GetDateTakenFromMetadata(fullPath);
+		filenameDT = GetDateTakenFromFilename(fullPath);
 	}
 
 	///<summary>Analyzes the Exif metadata (if any) of an image file.</summary>
