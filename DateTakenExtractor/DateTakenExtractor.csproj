@@ -2,23 +2,31 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>Date_Taken_Extractor</RootNamespace>
+        <RootNamespace>DateTakenExtractor</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageId>DateTakenExtractor</PackageId>
+        <PackageId>Date-Taken-Extractor</PackageId>
         <Authors>ellman12</Authors>
-        <Product>Date-Taken-Extractor</Product>
+        <Product>DateTakenExtractor</Product>
         <Description>Small, fast, simple library for extracting Date Taken metadata from photos and videos.</Description>
-        <PackageProjectUrl>https://github.com/ellman12/Date-Taken-Extractor</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/ellman12/DateTakenExtractor</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <RepositoryUrl>https://github.com/ellman12/Date-Taken-Extractor</RepositoryUrl>
+        <RepositoryUrl>https://github.com/ellman12/DateTakenExtractor</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <NeutralLanguage>en</NeutralLanguage>
         <Company>ellman12</Company>
-        <PackageTags>metadata;metadata-extraction;metadata-extractor;datetime-library;datetime;datetaken;date-taken</PackageTags>
+        <PackageTags>DateTakenExtractor;metadata;metadata-extraction;metadata-extractor;datetime-library;datetime;datetaken;date-taken</PackageTags>
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <AssemblyName>DateTakenExtractor</AssemblyName>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="MetadataExtractor" Version="2.7.2" />
