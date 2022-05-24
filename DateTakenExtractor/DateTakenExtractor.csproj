@@ -19,8 +19,9 @@
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
-        <Version>1.0.1</Version>
-        <PackageReleaseNotes>Fix a method name.</PackageReleaseNotes>
+        <Version>1.0.2</Version>
+        <PackageReleaseNotes>Method to get metadata for some reason had the potential to analyze a filename if it deemed necessary. Removed this as it caused problems and that method is meant only for analyzing internal metadata.</PackageReleaseNotes>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
