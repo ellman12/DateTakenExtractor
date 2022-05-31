@@ -1,5 +1,6 @@
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
+using MetadataExtractor.Formats.QuickTime;
 
 namespace DateTakenExtractor;
 
@@ -30,6 +31,28 @@ public static partial class DateTakenExtractor
 			return null; //No DT metadata in file.
 		}
 		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
+		{
+			return null;
+		}
+	}
+	
+	///<summary>Analyzes the QuickTime metadata (if any) of a video file.</summary>
+	///<param name="stream">Stream to analyze.</param>
+	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
+	///<remarks>This method will not close or dispose the Stream that is passed in.</remarks>
+	private static DateTime? AnalyzeQuickTime(Stream stream)
+	{
+		try
+		{
+			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(stream);
+			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
+
+			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
+				return dateTaken;
+
+			return null; //No DT metadata in file.
+		}
+		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //In testing, UnauthorizedAccessExceptions only happened for Switch clips. InvalidOperationExceptions can happen when no metadata in file.
 		{
 			return null;
 		}
