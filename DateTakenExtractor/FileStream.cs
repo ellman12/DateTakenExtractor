@@ -8,6 +8,32 @@ namespace DateTakenExtractor;
 //This file contains methods that accept FileStreams as arguments.
 public static partial class DateTakenExtractor
 {
+	///<summary>First tries to find Date Taken in the metadata of the file. If it can, uses that. If it can't find a DT in the metadata, looks in the filename. If no data in both, return null.</summary>
+	///<param name="fileStream">FileStream to analyze.</param>
+	///<param name="dateTakenSrc">'Metadata' if found DT in metadata. 'Filename' if DT came from filename. 'None' if no DT found and thus DT is null.</param>
+	///<exception cref="ArgumentNullException">Thrown if fileStream is null.</exception>
+	///<returns>A DateTime? representing the Date Taken that was found in the metadata, otherwise null.</returns>
+	///<remarks>This method will not close or dispose the FileStream that is passed in.</remarks>
+	public static DateTime? GetDateTakenAuto(FileStream fileStream, out DateTakenSrc dateTakenSrc)
+	{
+		DateTime? result = GetDateTakenFromMetadata(fileStream);
+		if (result != null)
+		{
+			dateTakenSrc = DateTakenSrc.Metadata;
+			return result;
+		}
+		
+		result = GetDateTakenFromFilename(fileStream.Name);
+		if (result != null)
+		{
+			dateTakenSrc = DateTakenSrc.Filename;
+			return result;
+		}
+
+		dateTakenSrc = DateTakenSrc.None;
+		return null;
+	}
+	
 	///<summary>Attempt to get Date Taken metadata from just the file's internal metadata.</summary>
 	///<param name="fileStream">FileStream to analyze.</param>
 	///<exception cref="ArgumentNullException">Thrown if fileStream is null.</exception>
@@ -22,6 +48,18 @@ public static partial class DateTakenExtractor
 		if (ext is ".jpg" or ".jpeg" or ".png" or ".gif") dateTaken = AnalyzeExif(fileStream);
 		else if (ext is ".mp4" or ".mov" or ".mkv") dateTaken = AnalyzeQuickTime(fileStream);
 		return dateTaken; //← Could be null or an actual value from this ↑.
+	}
+	
+	///<summary>Get Date Taken from both metadata AND the filename, when possible.</summary>
+	///<param name="fileStream">FileStream to analyze.</param>
+	///<param name="metadataDT">The DateTime? variable to store the metadata Date Taken in.</param>
+	///<param name="filenameDT">The DateTime? variable to store the filename Date Taken in.</param>
+	///<exception cref="ArgumentNullException">Thrown if fileStream is null.</exception>
+	///<remarks>This method will not close or dispose the FileStream that is passed in.</remarks>
+	public static void GetDateTakenFromBoth(FileStream fileStream, out DateTime? metadataDT, out DateTime? filenameDT)
+	{
+		metadataDT = GetDateTakenFromMetadata(fileStream);
+		filenameDT = GetDateTakenFromFilename(fileStream.Name);
 	}
 	
 	///<summary>Analyzes the Exif metadata (if any) of an image file.</summary>
