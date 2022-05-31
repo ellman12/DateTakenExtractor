@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 using MetadataExtractor.Formats.QuickTime;
@@ -9,6 +8,22 @@ namespace DateTakenExtractor;
 //This file contains methods that accept FileStreams as arguments.
 public static partial class DateTakenExtractor
 {
+	///<summary>Attempt to get Date Taken metadata from just the file's internal metadata.</summary>
+	///<param name="fileStream">FileStream to analyze.</param>
+	///<exception cref="ArgumentNullException">Thrown if fileStream is null.</exception>
+	///<returns>A DateTime? representing the Date Taken that was found in the metadata, otherwise null.</returns>
+	///<remarks>This method will not close or dispose the FileStream that is passed in.</remarks>
+	public static DateTime? GetDateTakenFromMetadata(FileStream fileStream)
+	{
+		if (fileStream == null) throw new ArgumentNullException(nameof(fileStream));
+		
+		DateTime? dateTaken = null;
+		string ext = Path.GetExtension(fileStream.Name).ToLower(); //Some files might have an extension that isn't all lowercase, like '.MOV'.
+		if (ext is ".jpg" or ".jpeg" or ".png" or ".gif") dateTaken = AnalyzeExif(fileStream);
+		else if (ext is ".mp4" or ".mov" or ".mkv") dateTaken = AnalyzeQuickTime(fileStream);
+		return dateTaken; //← Could be null or an actual value from this ↑.
+	}
+	
 	///<summary>Analyzes the Exif metadata (if any) of an image file.</summary>
 	///<param name="fileStream">FileStream to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>

@@ -24,7 +24,7 @@ public static partial class DateTakenExtractor
 	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found in the filename, otherwise null.</returns>
 	///<remarks>If you pass in a full path instead of a filename, it will attempt to strip out the extra characters and get just the filename, which is then used.</remarks>
-	public static DateTime? GetDateTakenFromFilename(string filename)
+	private static DateTime? GetDateTakenFromFilename(string filename)
 	{
 		if (filename == null) throw new ArgumentNullException(nameof(filename));
 		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
