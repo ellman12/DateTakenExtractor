@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 using MetadataExtractor.Formats.QuickTime;
@@ -5,18 +6,18 @@ using MetadataExtractor.Formats.QuickTime;
 namespace DateTakenExtractor;
 
 ///Contains static methods for making it easy to get Date Taken metadata from photos and videos.
-//This file contains methods that accept Streams as arguments.
+//This file contains methods that accept FileStreams as arguments.
 public static partial class DateTakenExtractor
 {
 	///<summary>Analyzes the Exif metadata (if any) of an image file.</summary>
-	///<param name="stream">Stream to analyze.</param>
+	///<param name="fileStream">FileStream to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	///<remarks>This method will not close or dispose the Stream that is passed in.</remarks>
-	private static DateTime? AnalyzeExif(Stream stream)
+	///<remarks>This method will not close or dispose the FileStream that is passed in.</remarks>
+	private static DateTime? AnalyzeExif(FileStream fileStream)
 	{
 		try
 		{
-			IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(stream);
+			IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fileStream);
 			ExifSubIfdDirectory directory = directories.OfType<ExifSubIfdDirectory>().First();
 
 			//Check at most three different places for possible DT Exif metadata.
@@ -37,14 +38,14 @@ public static partial class DateTakenExtractor
 	}
 	
 	///<summary>Analyzes the QuickTime metadata (if any) of a video file.</summary>
-	///<param name="stream">Stream to analyze.</param>
+	///<param name="fileStream">FileStream to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
-	///<remarks>This method will not close or dispose the Stream that is passed in.</remarks>
-	private static DateTime? AnalyzeQuickTime(Stream stream)
+	///<remarks>This method will not close or dispose the FileStream that is passed in.</remarks>
+	private static DateTime? AnalyzeQuickTime(FileStream fileStream)
 	{
 		try
 		{
-			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(stream);
+			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(fileStream);
 			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
 
 			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
