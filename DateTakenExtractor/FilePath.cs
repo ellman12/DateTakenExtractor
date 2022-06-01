@@ -72,9 +72,10 @@ public static partial class DateTakenExtractor
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	private static DateTime? AnalyzeExif(string fullPath)
 	{
+		using FileStream fileStream = new(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		try
 		{
-			IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fullPath);
+			IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(fileStream);
 			ExifSubIfdDirectory directory = directories.OfType<ExifSubIfdDirectory>().First();
 
 			//Check at most three different places for possible DT Exif metadata.
@@ -87,21 +88,22 @@ public static partial class DateTakenExtractor
 			if (directory.TryGetDateTime(ExifDirectoryBase.TagDateTime, out result)) return result;
 
 			return null; //No DT metadata in file.
-	    }
-	    catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
-	    {
+		}
+		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //InvalidOp can occur when file has no DT metadata.
+		{
 			return null;
-	    }
-    }
+		}
+	}
 
 	///<summary>Analyzes the QuickTime metadata (if any) of a video file.</summary>
 	///<param name="fullPath">Full path to the item to analyze.</param>
 	///<returns>A DateTime? representing the Date Taken metadata that was found in the file. null if couldn't find any data.</returns>
 	private static DateTime? AnalyzeQuickTime(string fullPath)
 	{
+		using FileStream fileStream = new(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		try
 		{
-			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(new FileStream(fullPath, FileMode.Open));
+			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(fileStream);
 			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
 
 			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
