@@ -27,8 +27,9 @@ public static partial class DateTakenExtractor
 			StartInfo = new ProcessStartInfo
 			{
 				//https://exiftool.org/TagNames/EXIF.html
-				FileName = "exiftool.exe",
-				Arguments = $"\"{fullPath}\" -overwrite_original -DateTimeOriginal=\"{DT}\" -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" {(Path.GetExtension(fullPath).ToLower() == ".png" ? $"-PNG:CreationTime=\"{DT}\" -PNG:ModifyDate=\"{DT}\"" : "")}",
+				//https://exiftool.org/TagNames/Shortcuts.html
+				FileName = "exiftool",
+				Arguments = $"\"{fullPath}\" -overwrite_original -AllDates=\"{DT}\" {(Path.GetExtension(fullPath).ToLower() == ".png" ? $"-PNG:CreationTime=\"{DT}\" -PNG:ModifyDate=\"{DT}\"" : "")}",
 				CreateNoWindow = true,
 				RedirectStandardError = false,
 				RedirectStandardInput = false,
