@@ -18,67 +18,30 @@ public static partial class DateTakenExtractor
 		
 	}
 	
-	private static void ModifyExifDT()
+	private static void ModifyImageDateTaken(string fullPath, DateTime newDateTaken)
 	{
-		//TODO: experiment with wrappers for exiftool and ffmpeg. Look over all exif/ffmpeg command line arguments
-		//TODO: https://exiftool.org/exiftool_pod.html
-		/*
-		 * Arguments to try:
-		 * -TAG or --TAG                    Extract or exclude specified tag
-		 *  -TAG[+-^]=[VALUE]                Write new value for tag
-		 *   -d FMT      (-dateFormat)        Set format for date/time values
-		 * -s[NUM]     (-short)             Short output format
-  		 * -S          (-veryShort)         Very short output format
-  		 * -v[NUM]     (-verbose)           Print verbose messages
-  		 * -fast[NUM]                       Increase speed when extracting metadata
-  		 * -o OUTFILE  (-out)               Set output file or directory name
-  		 * -overwrite_original              Overwrite original by renaming tmp file
-  		 * -overwrite_original_in_place     Overwrite original by copying tmp file
-  		 * -P          (-preserve)          Preserve file modification date/time
-		 *   -q          (-quiet)             Quiet processing
-		 * -wm MODE    (-writeMode)         Set mode for writing/creating tags
-		 *   -list[w|f|wf|g[NUM]|d|x]         List various exiftool capabilities
-		 * -api OPT[[^]=[VAL]]              Set ExifTool API option
-		 *  -common_args                     Define common arguments
-		 *  -execute[NUM]                    Execute multiple commands on one line
-		 *   -stay_open FLAG                  Keep reading -@ argfile even after EOF
-		 *  -userParam PARAM[[^]=[VAL]]      Set user parameter (API UserParam opt)
-		 */
+		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
+		
 		Process process = new()
 		{
-			PriorityClass = ProcessPriorityClass.RealTime,
+			PriorityClass = ProcessPriorityClass.RealTime, //TODO: might need to lower this priority by 1 if too much for PC to handle
 			StartInfo = new ProcessStartInfo
 			{
-				Arguments = null,
+				//https://exiftool.org/TagNames/EXIF.html
+				FileName = "exiftool.exe",
+				Arguments = $"\"{fullPath}\" -overwrite_original -DateTimeOriginal=\"{DT}\" -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" {(Path.GetExtension(fullPath).ToLower() == ".png" ? $"-PNG:CreationTime=\"{DT}\" -PNG:ModifyDate=\"{DT}\"" : "")}",
 				CreateNoWindow = true,
-				FileName = "exiftool",
 				RedirectStandardError = false,
 				RedirectStandardInput = false,
 				RedirectStandardOutput = false,
-				WindowStyle = ProcessWindowStyle.Hidden,
-				WorkingDirectory = null //TODO
+				WindowStyle = ProcessWindowStyle.Hidden
 			}
 		};
 		process.Start();
+		process.WaitForExit(); //TODO: is this needed?
 	}
 
-	private static void ModifyVideoDT()
+	private static void ModifyVideoDateTaken(string fullPath, DateTime newDateTaken)
 	{
-		Process process = new()
-		{
-			PriorityClass = ProcessPriorityClass.RealTime,
-			StartInfo = new ProcessStartInfo
-			{
-				Arguments = null,
-				CreateNoWindow = true,
-				FileName = "exiftool",
-				RedirectStandardError = false,
-				RedirectStandardInput = false,
-				RedirectStandardOutput = false,
-				WindowStyle = ProcessWindowStyle.Hidden,
-				WorkingDirectory = null //TODO
-			}
-		};
-		process.Start();
 	}
 }
