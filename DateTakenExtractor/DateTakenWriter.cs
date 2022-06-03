@@ -7,18 +7,18 @@ public static partial class DateTakenExtractor
 {
 	///<summary></summary>
 	///<param name="fullPath"></param>
-	public static void ModifyDateTaken(string fullPath)
+	public static void UpdateDateTaken(string fullPath)
 	{
 		
 	}
 
 	
-	public static void ModifyDateTaken(FileStream fileStream)
+	public static void UpdateDateTaken(FileStream fileStream)
 	{
 		
 	}
 	
-	private static void ModifyImageDateTaken(string fullPath, DateTime newDateTaken)
+	private static void UpdateImageDateTaken(string fullPath, DateTime newDateTaken)
 	{
 		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
 		
@@ -39,7 +39,7 @@ public static partial class DateTakenExtractor
 		process.Start();
 	}
 
-	private static void ModifyVideoDateTaken(string fullPath, DateTime newDateTaken)
+	private static void UpdateVideoDateTaken(string fullPath, DateTime newDateTaken)
 	{
 	}
 }
