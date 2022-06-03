@@ -42,5 +42,22 @@ public static partial class DateTakenExtractor
 
 	private static void UpdateVideoDateTaken(string fullPath, DateTime newDateTaken)
 	{
+		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
+		
+		using Process process = new()
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				//https://exiftool.org/forum/index.php?topic=11100.msg59329#msg59329
+				FileName = "exiftool",
+				Arguments = $"\"{fullPath}\" -overwrite_original - -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Track*Date=\"{DT}\" -Media*Date=\"{DT}\" Quicktime:DateTimeOriginal=\"{DT}\"",
+				CreateNoWindow = true,
+				RedirectStandardError = false,
+				RedirectStandardInput = false,
+				RedirectStandardOutput = false,
+				WindowStyle = ProcessWindowStyle.Hidden
+			}
+		};
+		process.Start();
 	}
 }
