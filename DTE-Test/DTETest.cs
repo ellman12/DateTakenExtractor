@@ -59,4 +59,28 @@ public class DTETest
 		};
 		process.Start();
 	}
+
+	[Theory]
+	//TODO: test this with mp4s, mkv, mov, etc.
+	public void VideoWriteTest(string fullPath)
+	{
+		_testOutputHelper.WriteLine(fullPath);
+		string DT = new DateTime(2070, 05, 05, 02, 03, 04).ToString("yyyy:M:d H:mm:ss");
+		
+		using Process process = new()
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				//https://exiftool.org/forum/index.php?topic=11100.msg59329#msg59329
+				FileName = "exiftool",
+				Arguments = $"\"{fullPath}\" -overwrite_original - -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Track*Date=\"{DT}\" -Media*Date=\"{DT}\" Quicktime:DateTimeOriginal=\"{DT}\"",
+				CreateNoWindow = true,
+				RedirectStandardError = false,
+				RedirectStandardInput = false,
+				RedirectStandardOutput = false,
+				WindowStyle = ProcessWindowStyle.Hidden
+			}
+		};
+		process.Start();
+	}
 }
