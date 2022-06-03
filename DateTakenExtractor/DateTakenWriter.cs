@@ -22,7 +22,7 @@ public static partial class DateTakenExtractor
 	{
 		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
 		
-		Process process = new()
+		using Process process = new()
 		{
 			StartInfo = new ProcessStartInfo
 			{
