@@ -19,6 +19,7 @@ public static partial class DateTakenExtractor
 	}
 	
 	private static void UpdateImageDateTaken(string fullPath, DateTime newDateTaken)
+	private static void UpdatePhotoDateTaken(string fullPath, DateTime newDateTaken)
 	{
 		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
 		
