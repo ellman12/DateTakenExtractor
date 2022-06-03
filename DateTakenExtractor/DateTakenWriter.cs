@@ -24,7 +24,6 @@ public static partial class DateTakenExtractor
 		
 		Process process = new()
 		{
-			PriorityClass = ProcessPriorityClass.RealTime, //TODO: might need to lower this priority by 1 if too much for PC to handle
 			StartInfo = new ProcessStartInfo
 			{
 				//https://exiftool.org/TagNames/EXIF.html
@@ -38,7 +37,6 @@ public static partial class DateTakenExtractor
 			}
 		};
 		process.Start();
-		process.WaitForExit(); //TODO: is this needed?
 	}
 
 	private static void ModifyVideoDateTaken(string fullPath, DateTime newDateTaken)
