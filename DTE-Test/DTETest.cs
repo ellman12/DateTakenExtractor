@@ -61,19 +61,82 @@ public class DTETest
 	}
 
 	[Theory]
-	//TODO: test this with mp4s, mkv, mov, etc.
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20211121_161132.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20211230_092341.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20211230_105702.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20220201_171817.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20220205_185148.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/video(1).mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/video.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/WHO_TF_ASKED.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021020521531600_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021071319494200_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021071323064500_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080122494500_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080122562700_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080514474000_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080613113400_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080613311500_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021080621124000_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021082620141400_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021082919492400_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021091116042200_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021091116052200_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021122223563300_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2021122321220000_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2022010222005500_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/2022010421142700_s.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20220107_072711.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/20210829_190606.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/20211027_210655.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20210714_194614.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20210714_194716.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20210829_094110.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/VID_20211016_113455.mp4")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2241.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2286.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2455.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2658.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2659.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2660.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2671.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2983.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_3246.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_3267.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_4418.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_5597.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_5601.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/TWUC6365.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/video0-23-1.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_0039.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2296.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1724.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/DSC_6663.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/720p.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/273205876_893087381357669_4286973116829744367_n.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_0067.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_0841.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1027.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1274.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1352.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1368.MOV")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1723.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_1726.mov")]
+	[InlineData("C:/Users/Elliott/Downloads/Photos-001/IMG_2048.MOV")]
 	public void VideoWriteTest(string fullPath)
 	{
 		_testOutputHelper.WriteLine(fullPath);
-		string DT = new DateTime(2070, 05, 05, 02, 03, 04).ToString("yyyy:M:d H:mm:ss");
+		//Videos require DateTime to be in UTC for some reason: https://exiftool.org/forum/index.php?PHPSESSID=a68f2cbabc087b534d7ac88e55fb932d&topic=11880.msg64084#msg64084
+		string DT = new DateTime(2019, 5, 1, 20, 20, 0).ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
 		
 		using Process process = new()
 		{
 			StartInfo = new ProcessStartInfo
 			{
 				//https://exiftool.org/forum/index.php?topic=11100.msg59329#msg59329
+				//https://exiftool.org/forum/index.php?topic=11272
 				FileName = "exiftool",
-				Arguments = $"\"{fullPath}\" -overwrite_original - -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Track*Date=\"{DT}\" -Media*Date=\"{DT}\" Quicktime:DateTimeOriginal=\"{DT}\"",
+				Arguments = $"\"{fullPath}\" -overwrite_original -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Quicktime:DateTimeOriginal=\"{DT}\"",
 				CreateNoWindow = true,
 				RedirectStandardError = false,
 				RedirectStandardInput = false,
@@ -82,5 +145,6 @@ public class DTETest
 			}
 		};
 		process.Start();
+		process.WaitForExit();
 	}
 }

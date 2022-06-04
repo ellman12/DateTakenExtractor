@@ -17,7 +17,7 @@ public static partial class DateTakenExtractor
 	}
 	
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo or video.</summary>
-	/// <param name="fileStream">FileStream of the item to update.</param>
+	///<param name="fileStream">FileStream of the item to update.</param>
 	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
 	public static void UpdateDateTaken(FileStream fileStream, DateTime newDateTaken)
 	{
@@ -56,15 +56,17 @@ public static partial class DateTakenExtractor
 	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
 	private static void UpdateVideoDateTaken(string fullPath, DateTime newDateTaken)
 	{
-		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
+		//Videos require DateTime to be in UTC for some reason: https://exiftool.org/forum/index.php?PHPSESSID=a68f2cbabc087b534d7ac88e55fb932d&topic=11880.msg64084#msg64084
+		string DT = newDateTaken.ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
 		
 		using Process process = new()
 		{
 			StartInfo = new ProcessStartInfo
 			{
 				//https://exiftool.org/forum/index.php?topic=11100.msg59329#msg59329
+				//https://exiftool.org/forum/index.php?topic=11272
 				FileName = "exiftool",
-				Arguments = $"\"{fullPath}\" -overwrite_original - -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Track*Date=\"{DT}\" -Media*Date=\"{DT}\" Quicktime:DateTimeOriginal=\"{DT}\"",
+				Arguments = $"\"{fullPath}\" -overwrite_original -CreateDate=\"{DT}\" -ModifyDate=\"{DT}\" -Track*Date=\"{DT}\" -Media*Date=\"{DT}\" -Quicktime:DateTimeOriginal=\"{DT}\"",
 				CreateNoWindow = true,
 				RedirectStandardError = false,
 				RedirectStandardInput = false,
@@ -73,5 +75,6 @@ public static partial class DateTakenExtractor
 			}
 		};
 		process.Start();
+		process.WaitForExit();
 	}
 }
