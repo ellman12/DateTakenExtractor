@@ -68,6 +68,8 @@ public static partial class DateTakenExtractor
 		//groups[1] could contain some extra junk at the start of the filename, (e.g., 105600 from Steam screenshots), so it's ignored.
 		//groups[2] is the year, groups[3] is the month, etc.
 		GroupCollection groups = matches[0].Groups;
-		return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}");
+		
+		try { return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}"); }
+		catch (FormatException) { return null; }
 	}
 }
