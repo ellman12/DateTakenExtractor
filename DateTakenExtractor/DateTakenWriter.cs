@@ -7,8 +7,8 @@ public static partial class DateTakenExtractor
 {
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo or video.</summary>
 	///<param name="fullPath">The full path to the item to update</param>
-	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
-	public static void UpdateDateTaken(string fullPath, DateTime newDateTaken)
+	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
+	public static void UpdateDateTaken(string fullPath, DateTime? newDateTaken)
 	{
 		using FileStream fileStream = new(fullPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None); //TODO: this .None option might cause problems...
 		string ext = Path.GetExtension(fileStream.Name).ToLower();
@@ -18,8 +18,8 @@ public static partial class DateTakenExtractor
 	
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo or video.</summary>
 	///<param name="fileStream">FileStream of the item to update.</param>
-	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
-	public static void UpdateDateTaken(FileStream fileStream, DateTime newDateTaken)
+	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
+	public static void UpdateDateTaken(FileStream fileStream, DateTime? newDateTaken)
 	{
 		string ext = Path.GetExtension(fileStream.Name).ToLower();
 		if (IsPhotoExt(ext)) UpdatePhotoDateTaken(fileStream.Name, newDateTaken);
@@ -28,10 +28,10 @@ public static partial class DateTakenExtractor
 	
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo.</summary>
 	///<param name="fullPath">The full path to the item to update.</param>
-	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
-	private static void UpdatePhotoDateTaken(string fullPath, DateTime newDateTaken)
+	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
+	private static void UpdatePhotoDateTaken(string fullPath, DateTime? newDateTaken)
 	{
-		string DT = newDateTaken.ToString("yyyy:M:d H:mm:ss");
+		string? DT = newDateTaken?.ToString("yyyy:M:d H:mm:ss");
 		
 		using Process process = new()
 		{
@@ -54,11 +54,11 @@ public static partial class DateTakenExtractor
 
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified video.</summary>
 	///<param name="fullPath">The full path to the item to update.</param>
-	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata.</param>
-	private static void UpdateVideoDateTaken(string fullPath, DateTime newDateTaken)
+	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
+	private static void UpdateVideoDateTaken(string fullPath, DateTime? newDateTaken)
 	{
 		//Videos require DateTime to be in UTC for some reason: https://exiftool.org/forum/index.php?PHPSESSID=a68f2cbabc087b534d7ac88e55fb932d&topic=11880.msg64084#msg64084
-		string DT = newDateTaken.ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
+		string? DT = newDateTaken?.ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
 		
 		using Process process = new()
 		{

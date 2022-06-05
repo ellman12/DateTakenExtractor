@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using Xunit;
@@ -41,8 +40,9 @@ public class DTETest
 	public void ImageWriteTest(string fullPath)
 	{
 		_testOutputHelper.WriteLine(fullPath);
-		string DT = new DateTime(2070, 05, 05, 02, 03, 04).ToString("yyyy:M:d H:mm:ss");
-		
+		// string DT = new DateTime(2070, 05, 05, 02, 03, 04).ToString("yyyy:M:d H:mm:ss");
+		string? DT = null;
+
 		Process process = new()
 		{
 			StartInfo = new ProcessStartInfo
@@ -127,7 +127,8 @@ public class DTETest
 	{
 		_testOutputHelper.WriteLine(fullPath);
 		//Videos require DateTime to be in UTC for some reason: https://exiftool.org/forum/index.php?PHPSESSID=a68f2cbabc087b534d7ac88e55fb932d&topic=11880.msg64084#msg64084
-		string DT = new DateTime(2019, 5, 1, 20, 20, 0).ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
+		// string DT = new DateTime(2019, 5, 1, 20, 20, 0).ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
+		string? DT = null;
 		
 		using Process process = new()
 		{
