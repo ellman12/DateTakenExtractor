@@ -49,6 +49,7 @@ public static partial class DateTakenExtractor
 			}
 		};
 		process.Start();
+		process.WaitForExit();
 	}
 
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified video.</summary>
