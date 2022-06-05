@@ -8,19 +8,19 @@
         <PackageId>DateTakenExtractor</PackageId>
         <Authors>ellman12</Authors>
         <Product>DateTakenExtractor</Product>
-        <Description>Small, fast, simple library for extracting Date Taken metadata from photos and videos.</Description>
+        <Description>Small, fast, simple library for reading and writing Date Taken metadata for photos and videos.</Description>
         <PackageProjectUrl>https://github.com/ellman12/DateTakenExtractor</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/ellman12/DateTakenExtractor</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <NeutralLanguage>en</NeutralLanguage>
         <Company>ellman12</Company>
-        <PackageTags>DateTakenExtractor;metadata;metadata-extraction;metadata-extractor;datetime-library;datetime;datetaken;date-taken</PackageTags>
+        <PackageTags>metadata;csharp;datetime;dotnet;nuget;metadata-extraction;metadata-extractor;datetime-library;datetaken;date-taken;datetakenextractor</PackageTags>
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
-        <Version>1.0.2</Version>
-        <PackageReleaseNotes>Method to get metadata for some reason had the potential to analyze a filename if it deemed necessary. Removed this as it caused problems and that method is meant only for analyzing internal metadata.</PackageReleaseNotes>
+        <Version>1.1.0</Version>
+        <PackageReleaseNotes>DTE V1.1 details on GitHub</PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
