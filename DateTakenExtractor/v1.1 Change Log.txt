@@ -1,0 +1,7 @@
+DTE V1.1
+New Features
+Added ability to write photo and video Date Taken metadata using the amazing command line program ExifTool. Can also remove Date Taken.
+Added overloads of the DT reading methods that accept a FileStream. The original overloads that take string arguments now use a 'using' to safely open and close the files when done. 
+
+Fixes and Improvements
+AnalyzeFilename() can now catch a FormatException and if it does, returns null.

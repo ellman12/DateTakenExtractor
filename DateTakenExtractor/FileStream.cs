@@ -45,8 +45,8 @@ public static partial class DateTakenExtractor
 		
 		DateTime? dateTaken = null;
 		string ext = Path.GetExtension(fileStream.Name).ToLower(); //Some files might have an extension that isn't all lowercase, like '.MOV'.
-		if (ext is ".jpg" or ".jpeg" or ".png" or ".gif") dateTaken = AnalyzeExif(fileStream);
-		else if (ext is ".mp4" or ".mov" or ".mkv") dateTaken = AnalyzeQuickTime(fileStream);
+		if (IsPhotoExt(ext)) dateTaken = AnalyzeExif(fileStream);
+		else if (IsVideoExt(ext)) dateTaken = AnalyzeQuickTime(fileStream);
 		return dateTaken; //← Could be null or an actual value from this ↑.
 	}
 	

@@ -18,7 +18,27 @@ public static partial class DateTakenExtractor
 		///No Date Taken in metadata or filename.
 		None
 	}
-	
+
+	///<summary>Determine if the specified extension is a photo extension. The supported extensions are ".jpg", ".jpeg", ".png", and ".gif".</summary>
+	///<param name="ext">The extension to analyze.</param>
+	///<exception cref="ArgumentException">Thrown if ext is not a supported extension.</exception>
+	///<returns>True if the extension was an photo extension, false otherwise.</returns>
+	private static bool IsPhotoExt(string ext)
+	{
+		if (ext.ToLower() is ".jpg" or ".jpeg" or ".png" or ".gif") return true;
+		throw new ArgumentException($"Unsupported file extension: {ext}");
+	}
+
+	///<summary>Determine if the specified extension is a video extension. The supported extensions are ".mp4", ".mov", and ".mkv".</summary>
+	///<param name="ext">The extension to analyze.</param>
+	///<exception cref="ArgumentException">Thrown if ext is not a supported extension.</exception>
+	///<returns>True if the extension was a video extension, false otherwise.</returns>
+	private static bool IsVideoExt(string ext)
+	{
+		if (ext.ToLower() is ".mp4" or ".mov" or ".mkv") return true;
+		throw new ArgumentException($"Unsupported file extension: {ext}");
+	}
+
 	///<summary>Get Date Taken metadata from just the filename.</summary>
 	///<param name="filename">The filename to analyze. You <i>can</i> also give it the full path to the file and it <i>might</i> work, but passing in just the filename is preferred.</param>
 	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
@@ -48,6 +68,8 @@ public static partial class DateTakenExtractor
 		//groups[1] could contain some extra junk at the start of the filename, (e.g., 105600 from Steam screenshots), so it's ignored.
 		//groups[2] is the year, groups[3] is the month, etc.
 		GroupCollection groups = matches[0].Groups;
-		return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}");
+		
+		try { return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}"); }
+		catch (FormatException) { return null; }
 	}
 }
