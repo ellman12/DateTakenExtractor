@@ -10,20 +10,9 @@ public static partial class DateTakenExtractor
 	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
 	public static void UpdateDateTaken(string fullPath, DateTime? newDateTaken)
 	{
-		using FileStream fileStream = new(fullPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None); //TODO: this .None option might cause problems...
-		string ext = Path.GetExtension(fileStream.Name).ToLower();
-		if (IsPhotoExt(ext)) UpdatePhotoDateTaken(fileStream.Name, newDateTaken);
-		else if (IsVideoExt(ext)) UpdateVideoDateTaken(fileStream.Name, newDateTaken);
-	}
-	
-	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo or video.</summary>
-	///<param name="fileStream">FileStream of the item to update.</param>
-	///<param name="newDateTaken">The new Date Taken to embed in the file's metadata. If null, removes any Date Taken metadata already present.</param>
-	public static void UpdateDateTaken(FileStream fileStream, DateTime? newDateTaken)
-	{
-		string ext = Path.GetExtension(fileStream.Name).ToLower();
-		if (IsPhotoExt(ext)) UpdatePhotoDateTaken(fileStream.Name, newDateTaken);
-		else if (IsVideoExt(ext)) UpdateVideoDateTaken(fileStream.Name, newDateTaken);
+		string ext = Path.GetExtension(fullPath).ToLower();
+		if (IsPhotoExt(ext)) UpdatePhotoDateTaken(fullPath, newDateTaken);
+		else if (IsVideoExt(ext)) UpdateVideoDateTaken(fullPath, newDateTaken);
 	}
 	
 	///<summary>Uses ExifTool to update the internal Date Taken metadata of the specified photo.</summary>
