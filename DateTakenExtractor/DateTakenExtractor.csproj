@@ -19,11 +19,11 @@
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
-        <Version>1.1.1</Version>
-        <PackageReleaseNotes>DTE V1.1.1 details on GitHub</PackageReleaseNotes>
+        <Version>1.1.2</Version>
+        <PackageReleaseNotes>DTE V1.1.2 details on GitHub. Updating to 1.1.2 is necessary if wanting to update Date Taken metadata as fixes issues.</PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <AssemblyVersion>1.1.1</AssemblyVersion>
-        <FileVersion>1.1.1</FileVersion>
+        <AssemblyVersion>1.1.2</AssemblyVersion>
+        <FileVersion>1.1.2</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
