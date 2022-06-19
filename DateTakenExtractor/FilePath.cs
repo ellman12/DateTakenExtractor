@@ -48,8 +48,12 @@ public static partial class DateTakenExtractor
 		if (!File.Exists(fullPath)) throw new FileNotFoundException($"{fullPath} does not exist.");
 		
 		DateTime? dateTaken = null;
-		string ext = Path.GetExtension(fullPath).ToLower(); //Some files might have an extension that isn't all lowercase, like '.MOV'.
-		if (IsPhotoExt(ext)) dateTaken = AnalyzeExif(fullPath);
+		string ext = Path.GetExtension(fullPath).ToLower();
+
+		if (ext == ".png") dateTaken = GetPngDateTakenExifTool(fullPath);
+		if (dateTaken != null) return dateTaken; //If it got DT from the PNG file's metadata, continue. Otherwise keep looking.
+
+		if (dateTaken == null && IsPhotoExt(ext)) dateTaken = AnalyzeExif(fullPath);
 		else if (IsVideoExt(ext)) dateTaken = AnalyzeQuickTime(fullPath);
 		return dateTaken; //← Could be null or an actual value from ↑ this.
 	}

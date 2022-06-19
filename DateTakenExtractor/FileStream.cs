@@ -44,10 +44,14 @@ public static partial class DateTakenExtractor
 		if (fileStream == null) throw new ArgumentNullException(nameof(fileStream));
 		
 		DateTime? dateTaken = null;
-		string ext = Path.GetExtension(fileStream.Name).ToLower(); //Some files might have an extension that isn't all lowercase, like '.MOV'.
-		if (IsPhotoExt(ext)) dateTaken = AnalyzeExif(fileStream);
+		string ext = Path.GetExtension(fileStream.Name).ToLower();
+
+		if (ext == ".png") dateTaken = GetPngDateTakenExifTool(fileStream.Name);
+		if (dateTaken != null) return dateTaken; //If it got DT from the PNG file's metadata, continue. Otherwise keep looking.
+
+		if (dateTaken == null && IsPhotoExt(ext)) dateTaken = AnalyzeExif(fileStream);
 		else if (IsVideoExt(ext)) dateTaken = AnalyzeQuickTime(fileStream);
-		return dateTaken; //← Could be null or an actual value from this ↑.
+		return dateTaken; //← Could be null or an actual value from ↑ this.
 	}
 	
 	///<summary>Get Date Taken from both metadata AND the filename, when possible.</summary>

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace DateTakenExtractor;
@@ -42,6 +43,31 @@ public static partial class DateTakenExtractor
 		DateTime? dateTaken = AnalyzeFilename(filename);
 		return dateTaken;
 	}
+
+	/// <summary>Using ExifTool, attempt to get this PNG file's Date Taken.</summary>
+	/// <param name="fullPath">The full path to the PNG.</param>
+	/// <returns>Either null or a Date Taken value.</returns>
+	/// <remarks>PNGs are very strange and usually don't have Date Taken, but sometimes they can.</remarks>
+	private static DateTime? GetPngDateTakenExifTool(string fullPath)
+	{
+		Process p = new Process
+		{
+			StartInfo = new ProcessStartInfo
+			{
+				FileName = "exiftool",
+				Arguments = $"\"{fullPath}\" -T -PNG:CreationTime",
+				CreateNoWindow = true,
+				RedirectStandardError = false,
+				RedirectStandardInput = false,
+				RedirectStandardOutput = true, //Necessary for reading output of ExifTool.
+				WindowStyle = ProcessWindowStyle.Hidden
+			}
+		};
+		p.Start();
+		p.WaitForExit();
+		string? output = p.StandardOutput.ReadLine();
+		return output == null ? null : Parse(output);
+	}
 	
 	///<summary>Analyzes a filename to see if it has a timestamp in it.</summary>
 	///<param name="filename">The filename to analyze, with or without the file extension.</param>
@@ -61,5 +87,28 @@ public static partial class DateTakenExtractor
 		
 		try { return DateTime.Parse($"{groups[2]}-{groups[3]}-{groups[4]} {groups[5]}:{groups[6]}:{groups[7]}"); }
 		catch (FormatException) { return null; }
+	}
+	
+	///<summary>Take a timestamp string like '2018-11-03 07:26:12', '20181103072612', or of similar format, and attempt to parse and return a DateTime representing it.</summary>
+	///<param name="timestamp">The timestamp to attempt to parse.</param>
+	///<returns>A DateTime? representing the parsed timestamp. null if couldn't determine Date Taken.</returns>
+	private static DateTime? Parse(string timestamp)
+	{
+		try
+		{
+			//Remove any useless characters, and turn all the parts of the timestamp into integers for creating the DateTime.
+			timestamp = timestamp.Replace(" ", "").Replace("-", "").Replace("_", "").Replace(".", "").Replace(":", "").Replace(";", "");
+			int year = Int32.Parse(timestamp[..4]);
+			int month = Int32.Parse(timestamp[4..6]);
+			int day = Int32.Parse(timestamp[6..8]);
+			int hour = Int32.Parse(timestamp[8..10]);
+			int min = Int32.Parse(timestamp[10..12]);
+			int sec = Int32.Parse(timestamp[12..14]);
+			return new DateTime(year, month, day, hour, min, sec);
+		}
+		catch (Exception)
+		{
+			return null;
+		}
 	}
 }
