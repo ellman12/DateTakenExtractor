@@ -8,7 +8,7 @@ DateTakenExtractor (DTE) is a small, fast, simple library for reading and writin
 This library came into existence because two separate projects of mine used the same classes/packages for finding this data, and trying to keep those two files the same was annoying and difficult. I also wanted to redo the class used in those two projects to be smaller, simpler, and better.
 
 This library uses [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet) for reading metadata from files, and is essentially a greatly simplified wrapper around it meant for reading exclusively Date Taken metadata.
-<br>[ExifTool](https://exiftool.org/) is a command line program used only for writing metadata, and needs to be added to the `PATH` or in a folder in the `PATH` in order for it to work with DTE.
+<br>[ExifTool](https://exiftool.org/) is a command line program used for writing metdata, and reading some metatada. It needs to be added to the `PATH` or in a folder in the `PATH` in order for it to work with DTE.
 
 ## Installing DateTakenExtractor
 The easiest way to use this library is via its [NuGet package](https://www.nuget.org/packages/DateTakenExtractor/).
@@ -27,7 +27,7 @@ PM> Install-Package DateTakenExtractor
 
 Or search for `DateTakenExtractor` in the NuGet Package Manager in Visual Studio or JetBrains Rider.
 
-**DTE also REQUIRES [ExifTool](https://exiftool.org/) for updating (but not reading) Date Taken metadata in files.**
+**DTE also REQUIRES [ExifTool](https://exiftool.org/).**
 <br>To install ExifTool, download the .exe, rename it from `exiftool(-k).exe` to `exiftool.exe`, and add it to your `PATH` or move the exe to a directory already in the `PATH`, like `C:/Windows`.
 
 ## Using DateTakenExtractor
