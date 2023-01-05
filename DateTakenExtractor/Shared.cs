@@ -57,8 +57,9 @@ public static partial class DateTakenExtractor
 				FileName = "exiftool",
 				Arguments = $"\"{fullPath}\" -T -PNG:CreationTime",
 				CreateNoWindow = true,
-				RedirectStandardError = false,
-				RedirectStandardInput = false,
+				RedirectStandardInput = true,
+				//1/5/2023: Set this ↑ to true because for some reason when using this in PSS's Import page, having this set to false caused the ExifTool process to not really be able
+				//to finish sometimes/all time time (I think all the time). This only happened if I used GetDateTakenFromBoth instead of GetDateTakenAuto. Auto was used in UploadApply.
 				RedirectStandardOutput = true, //Necessary for reading output of ExifTool.
 				WindowStyle = ProcessWindowStyle.Hidden
 			}
