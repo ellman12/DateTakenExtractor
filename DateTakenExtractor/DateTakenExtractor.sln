@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTakenExtractor", "DateTakenExtractor.csproj", "{4CCF61AD-E6C3-4934-96CC-9765F293CCE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTE-Test", "..\DTE-Test\DTE-Test.csproj", "{C4E162D9-F21C-422B-A8C5-38695A1FB727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTE-Test", "..\DTE-Test\DTE-Test.csproj", "{C4E162D9-F21C-422B-A8C5-38695A1FB727}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

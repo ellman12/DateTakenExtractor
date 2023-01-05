@@ -16,7 +16,7 @@ The easiest way to use this library is via its [NuGet package](https://www.nuget
 Either add this to your project file
 ```xml
 <ItemGroup>
-    <PackageReference Include="DateTakenExtractor" Version="1.1.3"/>
+    <PackageReference Include="DateTakenExtractor" Version="1.1.4"/>
 </ItemGroup>
 ```
 
