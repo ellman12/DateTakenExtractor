@@ -30,15 +30,15 @@ public static partial class DateTakenExtractor
 	///<returns>True if the extension was a video extension, false otherwise.</returns>
 	public static bool IsVideoExt(string ext) => ext.ToLower() is ".mp4" or ".mov" or ".mkv";
 
-	///<summary>Get Date Taken metadata from just the filename.</summary>
+	///<summary>Get Date Taken metadata from just the filename of a file.</summary>
 	///<param name="filename">The filename to analyze. You <i>can</i> also give it the full path to the file and it <i>might</i> work, but passing in just the filename is preferred.</param>
 	///<exception cref="ArgumentNullException">Thrown if filename is null.</exception>
 	///<returns>A DateTime? representing the Date Taken that was found in the filename, otherwise null.</returns>
 	///<remarks>If you pass in a full path instead of a filename, it will attempt to strip out the extra characters and get just the filename, which is then used.</remarks>
-	private static DateTime? GetDateTakenFromFilename(string filename)
+	public static DateTime? GetDateTakenFromFilename(string filename)
 	{
 		if (filename == null) throw new ArgumentNullException(nameof(filename));
-		if (Path.IsPathFullyQualified(filename)) Path.GetFileNameWithoutExtension(filename);
+		if (Path.IsPathFullyQualified(filename)) filename = Path.GetFileNameWithoutExtension(filename);
 		
 		DateTime? dateTaken = AnalyzeFilename(filename);
 		return dateTaken;
