@@ -37,11 +37,9 @@ public static partial class DateTakenExtractor
 	///<remarks>If you pass in a full path instead of a filename, it will attempt to strip out the extra characters and get just the filename, which is then used.</remarks>
 	public static DateTime? GetDateTakenFromFilename(string filename)
 	{
-		if (filename == null) throw new ArgumentNullException(nameof(filename));
+		if (String.IsNullOrWhiteSpace(filename)) throw new ArgumentNullException(nameof(filename));
 		if (Path.IsPathFullyQualified(filename)) filename = Path.GetFileNameWithoutExtension(filename);
-		
-		DateTime? dateTaken = AnalyzeFilename(filename);
-		return dateTaken;
+		return AnalyzeFilename(filename);
 	}
 
 	/// <summary>Using ExifTool, attempt to get this PNG file's Date Taken.</summary>
