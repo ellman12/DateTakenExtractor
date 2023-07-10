@@ -49,7 +49,7 @@ public static partial class DateTakenExtractor
 		DateTime? dateTaken = null;
 		string ext = Path.GetExtension(fullPath).ToLower();
 
-		if (ext == ".png") dateTaken = GetPngDateTakenExifTool(fullPath);
+		if (ext == ".png") dateTaken = GetPngDateTaken(fullPath);
 		if (dateTaken != null) return dateTaken; //If it got DT from the PNG file's metadata, continue. Otherwise keep looking.
 
 		if (dateTaken == null && IsPhotoExt(ext)) dateTaken = AnalyzeExif(fullPath);

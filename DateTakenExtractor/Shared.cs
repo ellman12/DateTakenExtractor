@@ -42,11 +42,11 @@ public static partial class DateTakenExtractor
 		return AnalyzeFilename(filename);
 	}
 
-	/// <summary>Using ExifTool, attempt to get this PNG file's Date Taken.</summary>
-	/// <param name="fullPath">The full path to the PNG.</param>
-	/// <returns>Either null or a Date Taken value.</returns>
-	/// <remarks>PNGs are very strange and usually don't have Date Taken, but sometimes they can.</remarks>
-	private static DateTime? GetPngDateTakenExifTool(string fullPath)
+	///<summary>Using ExifTool, attempt to get this PNG file's Date Taken.</summary>
+	///<param name="fullPath">The full path to the PNG.</param>
+	///<returns>Either null or a Date Taken value.</returns>
+	///<remarks>PNGs are very strange and usually don't have Date Taken, but sometimes they can.</remarks>
+	private static DateTime? GetPngDateTaken(string fullPath)
 	{
 		Process p = new Process
 		{
