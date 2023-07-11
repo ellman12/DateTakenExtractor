@@ -6,7 +6,7 @@ public record TestFile(string Filename, DateTime? MetadataDT, DateTime? Filename
 {
 	public static readonly List<TestFile> TestFiles;
 
-	public static string TestFilesPath => Path.Combine(Environment.CurrentDirectory.Replace("\\", "/").Replace("bin/Debug/net7.0", null), "Test Files");
+	public static string TestFilesPath => Path.Combine(Environment.CurrentDirectory.Replace("\\", "/").Replace("bin/Debug/net7.0", null), "TestFiles");
 	
 	public static string JsonPath => Path.Combine(TestFilesPath, "/TestFiles.json");
 
