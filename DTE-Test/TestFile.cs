@@ -14,6 +14,13 @@ public record TestFile(string Filename, DateTime? MetadataDT, DateTime? Filename
 	{
 		string json = File.ReadAllText(JsonPath);
 		TestFiles = JsonSerializer.Deserialize<List<TestFile>>(json)!;
+
+		foreach (TF tf in TestFiles)
+		{
+			string path = Path.Join(TestFilesPath, tf.Filename);
+			if (!File.Exists(path))
+				throw new FileNotFoundException($"{tf.Filename} does not exist");
+		}
 	}
 
 	///(Re-)Initializes the JSON file containing data about each file. Only needs to be ran when modifying the 'Test Files' folder.
