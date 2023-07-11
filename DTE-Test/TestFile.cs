@@ -23,6 +23,8 @@ public record TestFile(string Filename, DateTime? MetadataDT, DateTime? Filename
 	
 		foreach (string file in Directory.GetFiles(TestFilesPath))
 		{
+			if (file.EndsWith(".json")) continue;
+			
 			string filename = Path.GetFileName(file);
 			TestFile newItem = new(filename, D.GetDateTakenFromMetadata(file), D.GetDateTakenFromFilename(filename));
 			items.Add(newItem);
