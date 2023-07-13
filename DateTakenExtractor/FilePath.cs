@@ -109,10 +109,9 @@ public static partial class DateTakenExtractor
 			IEnumerable<MetadataExtractor.Directory> directories = QuickTimeMetadataReader.ReadMetadata(fileStream);
 			QuickTimeMovieHeaderDirectory directory = directories.OfType<QuickTimeMovieHeaderDirectory>().First();
 
-			if (directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) //If it found DT metadata, return that value.
-				return dateTaken;
-
-			return null; //No DT metadata in file.
+			if (!directory.TryGetDateTime(QuickTimeMovieHeaderDirectory.TagCreated, out DateTime dateTaken)) return null; //No DT metadata in file.
+			if (dateTaken.Year <= 1970) return null; //Video metadata can sometimes have weird values when it "doesn't have any DT." E.g., 1/1/1904, 1/1/1970, etc.
+			return dateTaken;
 		}
 		catch (Exception e) when (e is UnauthorizedAccessException or InvalidOperationException) //In testing, UnauthorizedAccessExceptions only happened for Switch clips. InvalidOperationExceptions can happen when no metadata in file.
 		{
