@@ -50,6 +50,24 @@ public class WritingTests
 	}
 
 	[Test]
+	public void WritePngDateTaken()
+	{
+		IEnumerable<TF> pngs = TF.TestFiles.Where(testFile => testFile.Filename is "c142964" or "Hello World");
+
+		foreach (TF file in pngs)
+		{
+			string path = Path.Join(TempTestFilesPath, file.Filename);
+			
+			DateTime newDateTaken = DateTime.Today + new TimeSpan(10, 30, 0); //10:30 AM
+			D.UpdateDateTaken(path, newDateTaken);
+
+			DateTime? updatedDateTaken = D.GetDateTakenFromMetadata(path);
+			if (updatedDateTaken != newDateTaken)
+				Assert.Fail($"{file.Filename}'s new metadata DT of {updatedDateTaken} does not match what what is was supposed to be: {newDateTaken}");
+		}
+	}
+	
+	[Test]
 	public void ClearMetadataDateTaken()
 	{
 		IEnumerable<TF> files = TF.TestFiles.Where(testFile => testFile.MetadataDT != null);
