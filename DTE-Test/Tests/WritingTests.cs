@@ -66,6 +66,24 @@ public class WritingTests
 				Assert.Fail($"{file.Filename}'s new metadata DT of {updatedDateTaken} does not match what what is was supposed to be: {newDateTaken}");
 		}
 	}
+
+	[Test]
+	public void WriteVideoDateTaken()
+	{
+		IEnumerable<TF> jpgs = TF.TestFiles.Where(testFile => testFile.Filename.ToLower().EndsWith(".mp4") || testFile.Filename.ToLower().EndsWith(".mov"));
+
+		foreach (TF file in jpgs)
+		{
+			string path = Path.Join(TempTestFilesPath, file.Filename);
+			
+			DateTime newDateTaken = DateTime.Today + new TimeSpan(10, 30, 0); //10:30 AM
+			D.UpdateDateTaken(path, newDateTaken.ToLocalTime());
+
+			DateTime? updatedDateTaken = D.GetDateTakenFromMetadata(path);
+			if (updatedDateTaken != newDateTaken)
+				Assert.Fail($"{file.Filename}'s new metadata DT of {updatedDateTaken} does not match what what is was supposed to be: {newDateTaken}");
+		}
+	}
 	
 	[Test]
 	public void ClearMetadataDateTaken()
