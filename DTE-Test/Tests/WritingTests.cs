@@ -1,4 +1,4 @@
-namespace DTE_Test.Tests;
+﻿namespace DTE_Test.Tests;
 
 [TestFixture]
 public class WritingTests
@@ -46,6 +46,22 @@ public class WritingTests
 			DateTime? updatedDateTaken = D.GetDateTakenFromMetadata(path);
 			if (updatedDateTaken != newDateTaken)
 				Assert.Fail($"{file.Filename}'s new metadata DT of {updatedDateTaken} does not match what what is was supposed to be: {newDateTaken}");
+		}
+	}
+
+	[Test]
+	public void ClearMetadataDateTaken()
+	{
+		IEnumerable<TF> files = TF.TestFiles.Where(testFile => testFile.MetadataDT != null);
+
+		foreach (TF file in files)
+		{
+			string path = Path.Join(TempTestFilesPath, file.Filename);
+			D.UpdateDateTaken(path, null);
+			
+			DateTime? updatedDateTaken = D.GetDateTakenFromMetadata(path);
+			if (updatedDateTaken != null)
+				Assert.Fail($"{file.Filename}'s metadata DT should be null, but was actually {updatedDateTaken}");
 		}
 	}
 
