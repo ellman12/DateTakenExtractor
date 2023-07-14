@@ -5,10 +5,7 @@
 
 DateTakenExtractor (DTE) is a small, fast, simple library for reading and writing Date Taken metadata for photos and videos, with the library consisting of only a single ```static``` C# class.
 
-This library came into existence because two separate projects of mine used the same classes/packages for finding this data, and trying to keep those two files the same was annoying and difficult. I also wanted to redo the class used in those two projects to be smaller, simpler, and better.
-
-This library uses [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet) for reading metadata from files, and is essentially a greatly simplified wrapper around it meant for reading exclusively Date Taken metadata.
-<br>[ExifTool](https://exiftool.org/) is a command line program used for writing metdata, and reading some metatada. It needs to be added to the `PATH` or in a folder in the `PATH` in order for it to work with DTE.
+DTE is essentially a simplified wrapper around [MetadataExtractor](https://github.com/drewnoakes/metadata-extractor-dotnet), designed to make it easier for me to read and write this data in my [two](https://github.com/ellman12/Photos-Storage-Server/) [projects](https://github.com/ellman12/Graphical-Photo-Organizer) that use it. DTE also provides an abstraction around [ExifTool](https://exiftool.org/), an excellent command line tool which I use to read certain types of metadata, as well as write/update Date Taken metadata.
 
 ## Installing DateTakenExtractor
 The easiest way to use this library is via its [NuGet package](https://www.nuget.org/packages/DateTakenExtractor/).
@@ -16,7 +13,7 @@ The easiest way to use this library is via its [NuGet package](https://www.nuget
 Either add this to your project file
 ```xml
 <ItemGroup>
-    <PackageReference Include="DateTakenExtractor" Version="1.1.4"/>
+    <PackageReference Include="DateTakenExtractor" Version="1.2.0"/>
 </ItemGroup>
 ```
 
@@ -28,7 +25,7 @@ PM> Install-Package DateTakenExtractor
 Or search for `DateTakenExtractor` in the NuGet Package Manager in Visual Studio or JetBrains Rider.
 
 **DTE also REQUIRES [ExifTool](https://exiftool.org/).**
-<br>To install ExifTool, download the .exe, rename it from `exiftool(-k).exe` to `exiftool.exe`, and add it to your `PATH` or move the exe to a directory already in the `PATH`, like `C:/Windows`.
+<br>To install ExifTool, download the .exe, rename it from `exiftool(-k).exe` to `exiftool.exe`, and add it to your `PATH` or move the .exe to a directory already in the `PATH`, like `C:/Windows`.
 
 ## Using DateTakenExtractor
 DateTakenExtractor is very simple to use. The class contains several public methods for your use.
@@ -55,6 +52,14 @@ D.UpdateDateTaken("C:/IMG_20210320_175909.jpg", new DateTime(2020, 6, 9, 12, 30,
 ```
 
 Date Taken metadata can come from two locations: the file's actual internal metadata, or its filename. If a DTE method can't find the Date Taken in the metadata or the filename, the return value/out parameter is set to `null`.
+
+### Supported file types:
+* JPG
+* PNG
+* GIF
+* MP4
+* MOV
+* MKV
 
 ## Contributing to DateTakenExtractor
 To contribute to DateTakenExtractor, follow these steps:

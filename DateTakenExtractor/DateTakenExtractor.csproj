@@ -19,12 +19,16 @@
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
-        <Version>1.1.4</Version>
-        <PackageReleaseNotes>DTE V1.1.4 details on GitHub.</PackageReleaseNotes>
+        <Version>1.2</Version>
+        <PackageReleaseNotes>DTE V1.2 details on GitHub.</PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <AssemblyVersion>1.1.4</AssemblyVersion>
-        <FileVersion>1.1.4</FileVersion>
+        <AssemblyVersion>1.2</AssemblyVersion>
+        <FileVersion>1.2</FileVersion>
         <Title>DateTakenExtractor</Title>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <Optimize>False</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
