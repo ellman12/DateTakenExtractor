@@ -47,7 +47,7 @@ public static partial class DateTakenExtractor
 	private static void UpdateVideoDateTaken(string fullPath, DateTime? newDateTaken)
 	{
 		//Videos require DateTime to be in UTC for some reason: https://exiftool.org/forum/index.php?PHPSESSID=a68f2cbabc087b534d7ac88e55fb932d&topic=11880.msg64084#msg64084
-		string? DT = newDateTaken?.ToUniversalTime().ToString("yyyy:M:d H:mm:ss");
+		string? DT = newDateTaken?.ToString("yyyy:M:d H:mm:ss");
 		
 		using Process process = new()
 		{

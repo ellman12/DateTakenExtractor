@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DateTakenExtractor", "DateTakenExtractor/DateTakenExtractor.csproj", "{4CCF61AD-E6C3-4934-96CC-9765F293CCE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTE-Test", "DTE-Test\DTE-Test.csproj", "{908D41E1-8267-43D1-823B-4EF68FB8E461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4CCF61AD-E6C3-4934-96CC-9765F293CCE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CCF61AD-E6C3-4934-96CC-9765F293CCE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CCF61AD-E6C3-4934-96CC-9765F293CCE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{908D41E1-8267-43D1-823B-4EF68FB8E461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{908D41E1-8267-43D1-823B-4EF68FB8E461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{908D41E1-8267-43D1-823B-4EF68FB8E461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{908D41E1-8267-43D1-823B-4EF68FB8E461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
