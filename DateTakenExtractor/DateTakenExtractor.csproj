@@ -19,11 +19,11 @@
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <AssemblyName>DateTakenExtractor</AssemblyName>
-        <Version>1.2</Version>
-        <PackageReleaseNotes>DTE V1.2 details on GitHub.</PackageReleaseNotes>
+        <Version>1.2.1</Version>
+        <PackageReleaseNotes>DTE V1.2.1 details on GitHub.</PackageReleaseNotes>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <AssemblyVersion>1.2</AssemblyVersion>
-        <FileVersion>1.2</FileVersion>
+        <AssemblyVersion>1.2.1</AssemblyVersion>
+        <FileVersion>1.2.1</FileVersion>
         <Title>DateTakenExtractor</Title>
     </PropertyGroup>
 
